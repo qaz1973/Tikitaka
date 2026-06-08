@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tikitaka 使用说明</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --ink: #1e2733;
+      --muted: #657184;
+      --line: #d9e0e8;
+      --accent: #0f8b8d;
+      --accent-soft: #e2f5f4;
+      --accent-2: #d97904;
+      --shadow: 0 10px 30px rgba(30, 39, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .header-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 24px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 760px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .quick-links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 6px 13px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .quick-links a:hover,
+    .quick-links a:focus-visible,
+    .side-nav a:hover,
+    .side-nav a:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 28px;
+      width: min(1180px, calc(100% - 32px));
+      margin: 26px auto 56px;
+      align-items: start;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 18px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .side-nav h2 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      line-height: 1.3;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 7px 9px;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .content {
+      display: grid;
+      gap: 22px;
+      min-width: 0;
+    }
+
+    section {
+      scroll-margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .steps {
+      display: grid;
+      gap: 16px;
+      padding: 20px 24px 24px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 48%);
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .step.no-video {
+      grid-template-columns: 1fr;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: #087174;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .tag.alt {
+      background: #fff0dc;
+      color: var(--accent-2);
+    }
+
+    video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111827;
+      object-fit: contain;
+    }
+
+    .footer {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto 34px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .layout {
+        display: block;
+        margin-top: 18px;
+      }
+
+      .side-nav {
+        position: static;
+        margin-bottom: 18px;
+      }
+
+      .step {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 29px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .header-inner,
+      .layout,
+      .footer {
+        width: min(100% - 22px, 1180px);
+      }
+
+      .section-head,
+      .steps {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .step {
+        padding: 14px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="eyebrow">Tikitaka 配置工具</p>
+      <h1>Tikitaka 使用说明</h1>
+      <p class="intro">本说明整理了设备预设、布局预设、普通功能修改、磁轴校准和进阶设置流程，并保留原始录屏演示。</p>
+      <nav class="quick-links" aria-label="快速导航">
+        <a href="#preset">预设使用</a>
+        <a href="#normal">普通设置</a>
+        <a href="#calibration">磁轴校准</a>
+        <a href="#advanced">进阶设置</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="side-nav" aria-label="目录">
+      <h2>目录</h2>
+      <a href="#preset">预设使用</a>
+      <a href="#normal">普通设置</a>
+      <a href="#calibration">磁轴校准</a>
+      <a href="#advanced">进阶设置</a>
+      <a href="#auto-calibration">自动校准</a>
+    </aside>
+
+    <div class="content">
+      <section id="preset">
+        <div class="section-head">
+          <h2>预设使用</h2>
+          <p>通过设备型号或布局型号快速完成基础分配。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h3>设备预设</h3>
+              <p>根据购买设备型号可以快速设置分配。</p>
+              <div class="tag-row">
+                <span class="tag">设备型号</span>
+                <span class="tag alt">快速分配</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="预设使用/设备预设/2026-06-08 16-22-11.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>布局预设</h3>
+              <p>根据购买的型号快速分配 GPIO 或者霍尔通道。</p>
+              <div class="tag-row">
+                <span class="tag">GPIO</span>
+                <span class="tag">霍尔通道</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="预设使用/布局预设/2026-06-08 16-26-11.mp4" type="video/mp4">
+            </video>
+          </article>
+        </div>
+      </section>
+
+      <section id="normal">
+        <div class="section-head">
+          <h2>普通设置</h2>
+          <p>用于修改常规按键功能和基础配置。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h3>修改功能</h3>
+              <p>选择需要修改的按键或功能项，按录屏流程完成调整。</p>
+              <div class="tag-row">
+                <span class="tag">功能修改</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="普通设置/修改功能/2026-06-08 16-42-41.mp4" type="video/mp4">
+            </video>
+          </article>
+        </div>
+      </section>
+
+      <section id="calibration">
+        <div class="section-head">
+          <h2>磁轴校准</h2>
+          <p>用于查看按键状态，校准按键，并设置 RT、行程和触发参数。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h3>测试按键状态</h3>
+              <p>测试按键状态。</p>
+              <div class="tag-row">
+                <span class="tag">状态测试</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="磁轴校准/测试按键状态/2026-06-08 16-30-06.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>校准按键</h3>
+              <p>点击校准开始按键校准，点击要校准的按键，缓慢按压 3 次后完成。</p>
+              <div class="tag-row">
+                <span class="tag">按键校准</span>
+                <span class="tag alt">按压 3 次</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="磁轴校准/校准按键/2026-06-08 16-30-33.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>批量 RT 行程触发设置</h3>
+              <p>批量设置 RT 和行程触发。</p>
+              <div class="tag-row">
+                <span class="tag">RT</span>
+                <span class="tag">行程触发</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="磁轴校准/批量rt行程触发设置/2026-06-08 16-32-28.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>单独设置</h3>
+              <p>单独设置 RT 和行程设置。</p>
+              <div class="tag-row">
+                <span class="tag">单键设置</span>
+                <span class="tag">RT</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="磁轴校准/单独设置/2026-06-08 16-34-25.mp4" type="video/mp4">
+            </video>
+          </article>
+        </div>
+      </section>
+
+      <section id="advanced">
+        <div class="section-head">
+          <h2>进阶设置</h2>
+          <p>用于切换进阶界面、添加按键、分配通道，以及设置灯光和自动校准。</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <div>
+              <h3>切换进阶界面</h3>
+              <p>先切换界面。</p>
+              <div class="tag-row">
+                <span class="tag">界面切换</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/2026-06-08 16-46-02.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>添加按键</h3>
+              <p>在进阶设置中添加需要配置的按键。</p>
+              <div class="tag-row">
+                <span class="tag">添加按键</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/添加按键/2026-06-08 16-46-24.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>分配按键</h3>
+              <p>在模板上设置 GPIO 或者磁轴通道。</p>
+              <div class="tag-row">
+                <span class="tag">GPIO</span>
+                <span class="tag">磁轴通道</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/分配按键/2026-06-08 16-47-40.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>定义按键灯颜色</h3>
+              <p>定义颜色，切换按键灯模式，并根据设备设置 LED 顺序。</p>
+              <div class="tag-row">
+                <span class="tag">按键灯</span>
+                <span class="tag alt">LED 顺序</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/定义按键灯颜色/2026-06-08 16-50-25.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step">
+            <div>
+              <h3>定义外壳灯颜色</h3>
+              <p>需要先添加氛围灯，手动匹配位置；起始数量是按键灯数量。</p>
+              <div class="tag-row">
+                <span class="tag">外壳灯</span>
+                <span class="tag">氛围灯</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/定义外壳灯颜色/2026-06-08 16-53-18.mp4" type="video/mp4">
+            </video>
+          </article>
+
+          <article class="step" id="auto-calibration">
+            <div>
+              <h3>自动校准</h3>
+              <p>自动获取更换设备的变化，防止环境变化导致的偏移和误触发问题。可以通过点击自动校准启动或关闭功能；开启后连接设备初始化会较为缓慢。</p>
+              <div class="tag-row">
+                <span class="tag">自动校准</span>
+                <span class="tag alt">防误触发</span>
+              </div>
+            </div>
+            <video controls preload="metadata">
+              <source src="进阶设置/自动校准/2026-06-08 16-58-57.mp4" type="video/mp4">
+            </video>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">Tikitaka 使用说明 · 录屏素材来自本仓库</footer>
+</body>
+</html>
