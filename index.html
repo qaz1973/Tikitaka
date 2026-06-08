@@ -141,6 +141,7 @@
       display: grid;
       gap: 22px;
       min-width: 0;
+      counter-reset: step;
     }
 
     section {
@@ -183,6 +184,7 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: #fbfcfe;
+      counter-increment: step;
     }
 
     .step.no-video {
@@ -190,10 +192,30 @@
     }
 
     .step h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       margin: 0 0 8px;
       font-size: 19px;
       line-height: 1.35;
       letter-spacing: 0;
+    }
+
+    .step h3::before {
+      content: counter(step, decimal-leading-zero);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 24px;
+      padding: 0 6px;
+      border: 1px solid #b8d9d8;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1;
     }
 
     .step p {
@@ -330,7 +352,7 @@
                 <span class="tag alt">快速分配</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="预设使用/设备预设/2026-06-08 16-22-11.mp4" type="video/mp4">
             </video>
           </article>
@@ -344,7 +366,7 @@
                 <span class="tag">霍尔通道</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="预设使用/布局预设/2026-06-08 16-26-11.mp4" type="video/mp4">
             </video>
           </article>
@@ -365,7 +387,7 @@
                 <span class="tag">功能修改</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="普通设置/修改功能/2026-06-08 16-42-41.mp4" type="video/mp4">
             </video>
           </article>
@@ -386,7 +408,7 @@
                 <span class="tag">状态测试</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="磁轴校准/测试按键状态/2026-06-08 16-30-06.mp4" type="video/mp4">
             </video>
           </article>
@@ -400,7 +422,7 @@
                 <span class="tag alt">按压 3 次</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="磁轴校准/校准按键/2026-06-08 16-30-33.mp4" type="video/mp4">
             </video>
           </article>
@@ -414,7 +436,7 @@
                 <span class="tag">行程触发</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="磁轴校准/批量rt行程触发设置/2026-06-08 16-32-28.mp4" type="video/mp4">
             </video>
           </article>
@@ -428,7 +450,7 @@
                 <span class="tag">RT</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="磁轴校准/单独设置/2026-06-08 16-34-25.mp4" type="video/mp4">
             </video>
           </article>
@@ -449,7 +471,7 @@
                 <span class="tag">界面切换</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/2026-06-08 16-46-02.mp4" type="video/mp4">
             </video>
           </article>
@@ -462,7 +484,7 @@
                 <span class="tag">添加按键</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/添加按键/2026-06-08 16-46-24.mp4" type="video/mp4">
             </video>
           </article>
@@ -476,7 +498,7 @@
                 <span class="tag">磁轴通道</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/分配按键/2026-06-08 16-47-40.mp4" type="video/mp4">
             </video>
           </article>
@@ -490,7 +512,7 @@
                 <span class="tag alt">LED 顺序</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/定义按键灯颜色/2026-06-08 16-50-25.mp4" type="video/mp4">
             </video>
           </article>
@@ -504,7 +526,7 @@
                 <span class="tag">氛围灯</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/定义外壳灯颜色/2026-06-08 16-53-18.mp4" type="video/mp4">
             </video>
           </article>
@@ -518,7 +540,7 @@
                 <span class="tag alt">防误触发</span>
               </div>
             </div>
-            <video controls autoplay muted loop playsinline preload="metadata">
+            <video muted loop playsinline preload="metadata">
               <source src="进阶设置/自动校准/2026-06-08 16-58-57.mp4" type="video/mp4">
             </video>
           </article>
@@ -532,32 +554,88 @@
   <script>
     const demoVideos = Array.from(document.querySelectorAll("video"));
 
-    function enableMutedAutoplay(video) {
+    function prepareDemoVideo(video) {
       video.muted = true;
       video.defaultMuted = true;
-      video.autoplay = true;
+      video.autoplay = false;
       video.loop = true;
       video.playsInline = true;
+      video.playbackRate = 0.5;
       video.setAttribute("muted", "");
-      video.setAttribute("autoplay", "");
       video.setAttribute("loop", "");
       video.setAttribute("playsinline", "");
+      video.removeAttribute("controls");
+    }
+
+    function playDemoVideo(video) {
+      prepareDemoVideo(video);
+      if (video.dataset.visible !== "true") {
+        try {
+          video.currentTime = 0;
+        } catch (error) {}
+      }
+      video.dataset.visible = "true";
       video.play().catch(() => {});
     }
 
-    demoVideos.forEach(enableMutedAutoplay);
+    demoVideos.forEach(prepareDemoVideo);
 
-    if ("IntersectionObserver" in window) {
-      const videoObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            enableMutedAutoplay(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
+    function getVideoScore(video) {
+      const rect = video.getBoundingClientRect();
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
 
-      demoVideos.forEach((video) => videoObserver.observe(video));
+      if (visibleHeight <= 0) {
+        return 0;
+      }
+
+      const visibleRatio = visibleHeight / Math.max(rect.height, 1);
+      const centerDistance = Math.abs((rect.top + rect.height / 2) - window.innerHeight / 2);
+      const centerBonus = 1 - Math.min(centerDistance / Math.max(window.innerHeight / 2, 1), 1);
+
+      return visibleRatio + centerBonus * 0.2;
     }
+
+    function updateActiveVideo() {
+      let activeVideo = null;
+      let bestScore = 0;
+
+      demoVideos.forEach((video) => {
+        const score = getVideoScore(video);
+
+        if (score > bestScore) {
+          activeVideo = video;
+          bestScore = score;
+        }
+      });
+
+      demoVideos.forEach((video) => {
+        if (video === activeVideo && bestScore >= 0.45) {
+          playDemoVideo(video);
+        } else {
+          video.dataset.visible = "false";
+          video.pause();
+        }
+      });
+    }
+
+    let updateQueued = false;
+
+    function queueVideoUpdate() {
+      if (updateQueued) {
+        return;
+      }
+
+      updateQueued = true;
+      requestAnimationFrame(() => {
+        updateQueued = false;
+        updateActiveVideo();
+      });
+    }
+
+    window.addEventListener("scroll", queueVideoUpdate, { passive: true });
+    window.addEventListener("resize", queueVideoUpdate);
+    window.addEventListener("load", queueVideoUpdate);
+    queueVideoUpdate();
   </script>
 </body>
 </html>
