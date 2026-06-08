@@ -330,7 +330,7 @@
                 <span class="tag alt">快速分配</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="预设使用/设备预设/2026-06-08 16-22-11.mp4" type="video/mp4">
             </video>
           </article>
@@ -344,7 +344,7 @@
                 <span class="tag">霍尔通道</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="预设使用/布局预设/2026-06-08 16-26-11.mp4" type="video/mp4">
             </video>
           </article>
@@ -365,7 +365,7 @@
                 <span class="tag">功能修改</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="普通设置/修改功能/2026-06-08 16-42-41.mp4" type="video/mp4">
             </video>
           </article>
@@ -386,7 +386,7 @@
                 <span class="tag">状态测试</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="磁轴校准/测试按键状态/2026-06-08 16-30-06.mp4" type="video/mp4">
             </video>
           </article>
@@ -400,7 +400,7 @@
                 <span class="tag alt">按压 3 次</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="磁轴校准/校准按键/2026-06-08 16-30-33.mp4" type="video/mp4">
             </video>
           </article>
@@ -414,7 +414,7 @@
                 <span class="tag">行程触发</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="磁轴校准/批量rt行程触发设置/2026-06-08 16-32-28.mp4" type="video/mp4">
             </video>
           </article>
@@ -428,7 +428,7 @@
                 <span class="tag">RT</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="磁轴校准/单独设置/2026-06-08 16-34-25.mp4" type="video/mp4">
             </video>
           </article>
@@ -449,7 +449,7 @@
                 <span class="tag">界面切换</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/2026-06-08 16-46-02.mp4" type="video/mp4">
             </video>
           </article>
@@ -462,7 +462,7 @@
                 <span class="tag">添加按键</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/添加按键/2026-06-08 16-46-24.mp4" type="video/mp4">
             </video>
           </article>
@@ -476,7 +476,7 @@
                 <span class="tag">磁轴通道</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/分配按键/2026-06-08 16-47-40.mp4" type="video/mp4">
             </video>
           </article>
@@ -490,7 +490,7 @@
                 <span class="tag alt">LED 顺序</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/定义按键灯颜色/2026-06-08 16-50-25.mp4" type="video/mp4">
             </video>
           </article>
@@ -504,7 +504,7 @@
                 <span class="tag">氛围灯</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/定义外壳灯颜色/2026-06-08 16-53-18.mp4" type="video/mp4">
             </video>
           </article>
@@ -518,7 +518,7 @@
                 <span class="tag alt">防误触发</span>
               </div>
             </div>
-            <video controls preload="metadata">
+            <video controls autoplay muted loop playsinline preload="metadata">
               <source src="进阶设置/自动校准/2026-06-08 16-58-57.mp4" type="video/mp4">
             </video>
           </article>
@@ -528,5 +528,36 @@
   </main>
 
   <footer class="footer">Tikitaka 使用说明 · 录屏素材来自本仓库</footer>
+
+  <script>
+    const demoVideos = Array.from(document.querySelectorAll("video"));
+
+    function enableMutedAutoplay(video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.autoplay = true;
+      video.loop = true;
+      video.playsInline = true;
+      video.setAttribute("muted", "");
+      video.setAttribute("autoplay", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("playsinline", "");
+      video.play().catch(() => {});
+    }
+
+    demoVideos.forEach(enableMutedAutoplay);
+
+    if ("IntersectionObserver" in window) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            enableMutedAutoplay(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      demoVideos.forEach((video) => videoObserver.observe(video));
+    }
+  </script>
 </body>
 </html>
