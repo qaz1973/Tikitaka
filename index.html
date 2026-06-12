@@ -186,6 +186,7 @@
     }
 
     section,
+    .guide-section,
     .reference-section {
       scroll-margin-top: 16px;
       border: 1px solid var(--line);
@@ -317,10 +318,6 @@
       border-top: 1px solid var(--line);
     }
 
-    .detail-block--wide {
-      grid-column: 1 / -1;
-    }
-
     .detail-block h4 {
       margin: 0 0 6px;
       color: #344054;
@@ -340,10 +337,86 @@
       margin-top: 3px;
     }
 
-    .evidence {
-      margin: 12px 0 0;
-      color: #7a8795;
+    .related-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .related-link {
+      display: grid;
+      gap: 2px;
+      align-items: start;
+      min-height: 28px;
+      padding: 7px 10px;
+      border: 1px solid #b8d9d8;
+      border-radius: 7px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+
+    .related-link:hover,
+    .related-link:focus-visible {
+      border-color: var(--accent);
+      background: #d4efee;
+      outline: none;
+    }
+
+    .related-reason {
+      color: #087174;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .related-target {
+      color: var(--muted);
       font-size: 12px;
+    }
+
+    .step-hint {
+      margin: 12px 0 0;
+      padding: 8px 10px;
+      border-left: 3px solid #f2c98b;
+      background: #fffaf1;
+      color: #6f4b15;
+      font-size: 13px;
+    }
+
+    .issue-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px 22px 20px;
+    }
+
+    .issue-link {
+      display: grid;
+      gap: 4px;
+      min-height: 70px;
+      align-content: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .issue-link:hover,
+    .issue-link:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .issue-link span {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .issue-link strong {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .reference-body {
@@ -404,6 +477,7 @@
       }
 
       .detail-grid,
+      .issue-grid,
       .reference-body {
         grid-template-columns: 1fr;
       }
@@ -422,6 +496,7 @@
 
       .section-head,
       .steps,
+      .issue-grid,
       .reference-body {
         padding-left: 14px;
         padding-right: 14px;
@@ -442,10 +517,10 @@
     <div class="header-inner">
       <p class="eyebrow">Tikitaka 配置工具</p>
       <h1>Tikitaka 使用说明</h1>
-      <p class="intro">说明页面根据录屏目录自动排序生成，并按项目源码补全操作流程、检查点和注意事项。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
-      <p class="source-note">项目功能以本地源码为准：C:\Users\Administrator\ce\wd\ce2_4_4_heac_clean。 用户给出的 build-rp2040-heac-clean 是构建输出目录，主要用于固件产物，不是说明文案的源码依据。 录屏目录只作为视频素材来源：D:\2\说明书视频文件部分。</p>
+      <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
+        <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
         <a href="#advanced">进阶设置</a>
         <a href="#references">参考资料</a>
@@ -456,6 +531,7 @@
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
+      <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
       <a class="minor" href="#step-010">设备预设</a>
       <a class="minor" href="#step-020">布局预设</a>
@@ -486,6 +562,16 @@
 
     <div class="content">
 
+      <section class="guide-section" id="guide">
+        <div class="section-head">
+          <h2>按问题找演示</h2>
+          <p>不知道下一步点哪里时，先按你遇到的问题跳到对应视频。</p>
+        </div>
+        <div class="issue-grid">
+          <a class="issue-link" href="#step-010"><span>第一次配置</span><strong>设备预设</strong></a><a class="issue-link" href="#step-020"><span>按键位置不对</span><strong>布局预设</strong></a><a class="issue-link" href="#step-030"><span>按键功能不对</span><strong>按键功能调整</strong></a><a class="issue-link" href="#step-230"><span>按了实体键，画面不是这个键</span><strong>按键通道与引脚分配</strong></a><a class="issue-link" href="#step-040"><span>一个键太灵敏或不触发</span><strong>单键行程触发设置</strong></a><a class="issue-link" href="#step-050"><span>多个键一起调手感</span><strong>批量行程触发设置</strong></a><a class="issue-link" href="#step-060"><span>RT 不跟手</span><strong>单键 RT 设置</strong></a><a class="issue-link" href="#step-090"><span>校准后怕丢失</span><strong>保存校准结果</strong></a><a class="issue-link" href="#step-100"><span>最后确认有没有成功</span><strong>RT 与行程测试</strong></a><a class="issue-link" href="#step-260"><span>灯亮到别的按键上</span><strong>按键灯光顺序设置</strong></a><a class="issue-link" href="#step-270"><span>颜色不对</span><strong>按键灯光颜色设置</strong></a><a class="issue-link" href="#step-230"><span>加了新按键但不能用</span><strong>按键通道与引脚分配</strong></a>
+        </div>
+      </section>
+
       <section id="basic">
         <div class="section-head">
           <h2>基础设置</h2>
@@ -500,24 +586,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>设备预设</h3>
-                <p>按设备型号套用基础配置，适合作为第一次配置或恢复标准配置的起点。</p>
+                <p>按设备型号套用基础配置，视频演示的是打开设备预设并选择对应型号。</p>
                 <div class="tag-row"><span class="tag">设备型号</span><span class="tag alt">快速套用</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入磁轴配置页面，打开“设备预设”。</li><li>选择与你设备型号一致的预设。</li><li>确认套用后检查按键数量、画布位置、通道和灯光是否符合当前设备。</li><li>确认无误后保存配置。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入磁轴配置页面，打开“设备预设”。</li><li>选择与你设备型号一致的预设。</li><li>套用后回到主画布，看按钮数量和排列是否大致正确。</li><li>继续按下面的相关演示处理布局、键位或保存。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>按键数量和实际面板一致。</li><li>设备预设没有把不需要的 GPIO、LED 或外设配置写入当前设备。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>设备预设可能同时影响磁轴通道、GPIO、LED、外设等硬件段，套用前建议确认当前配置是否需要备份。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-020"><span class="related-reason">按键位置不对</span><span class="related-target">布局预设</span></a><a class="related-link" href="#step-030"><span class="related-reason">按键功能不对</span><span class="related-target">按键功能调整</span></a><a class="related-link" href="#step-110"><span class="related-reason">已经可以用了</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、www/public/presets</p>
+              <p class="step-hint">已有可用配置时先备份；第一次配置可以直接按视频套用。</p>
             </div>
           </article>
 
@@ -528,24 +610,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>布局预设</h3>
-                <p>根据实际面板布局快速生成按键位置和通道关系。</p>
+                <p>根据实际面板布局快速生成按键位置，视频演示的是选择布局并套用。</p>
                 <div class="tag-row"><span class="tag">布局</span><span class="tag alt">通道关系</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入磁轴配置页面，打开“布局预设”。</li><li>选择与外壳或键位排列一致的布局。</li><li>套用后检查每个按钮在画布上的位置和通道编号。</li><li>如果只需要调整少量键位，再进入后续按键功能或通道分配步骤。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入磁轴配置页面，打开“布局预设”。</li><li>选择与外壳或键位排列一致的布局。</li><li>套用后看画布上的按钮位置是否接近你的设备。</li><li>如果只是键位功能不对，继续看“按键功能调整”。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>方向键、功能键和辅助键位置清楚可辨。</li><li>布局不会覆盖你已经调整好的自定义位置。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>布局预设主要用于画布、按钮和动作关系；如果硬件通道也要跟着改变，请再检查通道分配。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-030"><span class="related-reason">键位功能不对</span><span class="related-target">按键功能调整</span></a><a class="related-link" href="#step-040"><span class="related-reason">想调手感</span><span class="related-target">单键行程触发设置</span></a><a class="related-link" href="#step-110"><span class="related-reason">布局已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、www/public/presets/models</p>
+              <p class="step-hint">普通用户优先用布局预设；只有按键对应不上时，再看进阶里的通道分配。</p>
             </div>
           </article>
 
@@ -556,24 +634,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>按键功能调整</h3>
-                <p>点击目标按键并修改它对应的 GP2040 动作。</p>
+                <p>点击画布上的按键，修改它在手柄里的功能。</p>
                 <div class="tag-row"><span class="tag">按键功能</span><span class="tag alt">动作映射</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>在磁轴配置画布上选择一个按键。</li><li>在右侧属性面板中选择“功能”。</li><li>按需要改成方向、B1/B2、L1/R1、S1/S2、A1/A2、Fn 等动作。</li><li>逐个确认关键按键后保存。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>在磁轴配置画布上选择一个按键。</li><li>在右侧属性面板中选择“功能”。</li><li>按需要改成方向、B1/B2、L1/R1、S1/S2、A1/A2、Fn 等动作。</li><li>改完后继续看测试或保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>画布上的标签和你的目标键位一致。</li><li>进入测试模式后按下按键，触发状态和显示的动作一致。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>HE 通道和 GPIO 映射都可以分配功能，但 GPIO 按键没有行程和 RT 参数。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-100"><span class="related-reason">确认按键是否生效</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">功能已经改好</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、proto/enums.proto</p>
+              <p class="step-hint">只改按键功能时，不需要进入专业模式。</p>
             </div>
           </article>
 
@@ -584,24 +658,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>单键行程触发设置</h3>
-                <p>只调整一个磁轴按键的总行程和触发行程，适合微调单个键的手感。</p>
+                <p>只调整一个磁轴按键的总行程和触发行程，视频演示的是点按键后在弹窗里修改数值。</p>
                 <div class="tag-row"><span class="tag">Travel</span><span class="tag alt">Actuation</span><span class="tag">单键</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>选择一个 HE 按键。</li><li>切换到“行程”工具。</li><li>设置总行程 Travel，通常按实际轴体行程填写。</li><li>设置触发行程 Actuation，数值不能大于总行程。</li><li>保存前先进入测试模式确认触发位置。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>选择一个 HE 按键。</li><li>切换到“行程”工具。</li><li>在弹出的行程设置窗口里修改 Travel。</li><li>再修改 Actuation。</li><li>改完后关闭窗口，继续看测试或保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>轻按到目标深度时按键开始触发。</li><li>完全释放后不会残留触发状态。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>触发行程越小越早触发，但过小会增加误触风险。</li><li>GPIO 按键不支持行程设置。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-050"><span class="related-reason">多个键一起调</span><span class="related-target">批量行程触发设置</span></a><a class="related-link" href="#step-060"><span class="related-reason">继续调 RT</span><span class="related-target">单键 RT 设置</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认触发位置</span><span class="related-target">RT 与行程测试</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、proto/config.proto</p>
+              <p class="step-hint">Actuation 数值越小越早触发；如果误触，调大一点再测试。</p>
             </div>
           </article>
 
@@ -612,24 +682,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>批量行程触发设置</h3>
-                <p>同时选择多个磁轴按键并统一应用 Travel 和 Actuation 参数。</p>
+                <p>在“更多”菜单里批量填写 Travel 和 Actuation，视频演示的是普通界面也能看到的批量设置。</p>
                 <div class="tag-row"><span class="tag">Travel</span><span class="tag alt">批量</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>按住多选或框选需要统一手感的按键。</li><li>切换到“行程”工具。</li><li>输入总行程和触发行程。</li><li>批量应用后逐个测试常用方向键或攻击键。</li><li>确认无误后保存。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>打开顶部“更多”菜单。</li><li>保持或切到“普通”界面。</li><li>在批量设置里填写行程和触发行程。</li><li>点击“批量应用行程/触发”。</li><li>继续看 RT 设置、测试或保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>同组按键触发手感一致。</li><li>没有把不需要调整的按键一起选中。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>批量设置会覆盖所选按键原有参数，适合 WASD、方向键或同规格按键统一设置。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-070"><span class="related-reason">批量调 RT</span><span class="related-target">批量 RT 设置</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认手感</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">参数已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx</p>
+              <p class="step-hint">批量应用会把所选按键改成同一组行程参数，适合 WASD、方向键等需要统一手感的按键。</p>
             </div>
           </article>
 
@@ -645,19 +711,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>选择一个 HE 按键。</li><li>切换到“RT”工具。</li><li>打开 Enable Rapid Trigger。</li><li>设置 RT Down 和 RT Up。</li><li>进入测试模式，连续轻按和释放，确认不会误触或粘连。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>按下时响应足够快。</li><li>轻微抖动时不会反复误触。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>RT 数值越小越灵敏，也越依赖轴体和传感器稳定性。</li><li>如果出现误触，先适当增大 RT Down 或 RT Up，再重新测试。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-070"><span class="related-reason">多个键一起调 RT</span><span class="related-target">批量 RT 设置</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认 RT 是否正常</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">RT 已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、src/webconfig.cpp</p>
+              <p class="step-hint">RT 数值越小越灵敏，也越依赖轴体和传感器稳定性。</p>
             </div>
           </article>
 
@@ -673,19 +735,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>选择需要统一 RT 手感的多个 HE 按键。</li><li>切换到“RT”工具并开启 Rapid Trigger。</li><li>填写 RT Down 和 RT Up。</li><li>批量应用后在测试模式中逐个按键检查。</li><li>确认后保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>同组按键的触发和复位速度一致。</li><li>没有把辅助键或不需要 RT 的按键一起应用。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>批量 RT 适合方向键和常用动作键，不建议在未测试前直接套到所有按键。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-100"><span class="related-reason">确认批量设置效果</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">RT 已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx</p>
+              <p class="step-hint">批量 RT 适合方向键和常用动作键，不建议在未测试前直接套到所有按键。</p>
             </div>
           </article>
 
@@ -701,19 +759,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入按键校准或批量校准入口。</li><li>保持所有按键松开，等待空闲采样完成。</li><li>按界面提示逐个按下目标按键到最大行程。</li><li>等待系统记录按下点后松开。</li><li>全部完成后检查状态，再进入保存校准结果。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入按键校准或批量校准入口。</li><li>保持所有按键松开，等待空闲采样完成。</li><li>按界面提示逐个按下目标按键到最大行程。</li><li>等待系统记录按下点后松开。</li><li>全部完成后看页面状态，再进入保存校准结果。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>空闲状态下按键不触发。</li><li>完全按下时状态稳定触发。</li><li>测试画面中的行程变化连续，不出现明显跳动。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>校准时不要压着其他按键。</li><li>如果某个键状态异常，重新校准该键或先检查通道/引脚分配。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-090"><span class="related-reason">校准后别丢失</span><span class="related-target">保存校准结果</span></a><a class="related-link" href="#step-100"><span class="related-reason">校准后测试</span><span class="related-target">RT 与行程测试</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、WebApi.js、src/webconfig.cpp</p>
+              <p class="step-hint">校准时不要压着其他按键。</p>
             </div>
           </article>
 
@@ -729,19 +783,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>确认所有需要校准的按键已经完成。</li><li>点击保存或保存校准结果。</li><li>等待保存完成提示。</li><li>保存后再做一次 RT 与行程测试。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>页面提示保存成功。</li><li>刷新页面或重新进入后，校准状态仍然正常。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>未保存就离开页面、刷新或重启，校准结果可能不会写入设备。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-100"><span class="related-reason">确认校准效果</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">写入最终配置</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、src/webconfig.cpp</p>
+              <p class="step-hint">未保存就离开页面、刷新或重启，校准结果可能不会写入设备。</p>
             </div>
           </article>
 
@@ -757,19 +807,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>打开测试模式。</li><li>逐个按下需要检查的按键。</li><li>观察触发状态、行程读数和释放响应。</li><li>发现异常时返回校准、行程或 RT 设置重新调整。</li><li>测试通过后保存最终配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>按下、保持、释放三个阶段都稳定。</li><li>RT 开启的按键能随释放和再按快速响应。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>测试模式读取运行时状态，不等于已经保存；参数确认后仍要执行保存。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-040"><span class="related-reason">太早或太晚触发</span><span class="related-target">单键行程触发设置</span></a><a class="related-link" href="#step-060"><span class="related-reason">RT 不跟手</span><span class="related-target">单键 RT 设置</span></a><a class="related-link" href="#step-110"><span class="related-reason">测试正常</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、WebApi.js</p>
+              <p class="step-hint">测试模式读取运行时状态，不等于已经保存；参数确认后仍要执行保存。</p>
             </div>
           </article>
 
@@ -785,19 +831,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>确认预设、按键、行程、RT、SOCD 或模式设置都已经检查完。</li><li>点击保存配置。</li><li>等待保存完成提示。</li><li>如果页面提示需要重启，再从顶部导航选择重启方式。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>页面出现保存成功或进度完成提示。</li><li>重新进入页面后关键参数仍然保留。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>保存、重启、恢复默认都会改变设备状态，请确认后再执行。</li><li>重启到 Controller 模式后可能无法继续打开 Web Config，需要重新进入配置模式。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-120"><span class="related-reason">要换输入模式</span><span class="related-target">控制器模式切换</span></a><a class="related-link" href="#step-130"><span class="related-reason">要改方向规则</span><span class="related-target">SOCD 模式切换</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：Navigation.jsx、WebApi.js</p>
+              <p class="step-hint">保存、重启、恢复默认都会改变设备状态，请确认后再执行。</p>
             </div>
           </article>
 
@@ -813,19 +855,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入设置或磁轴页顶部的输入模式入口。</li><li>选择目标控制器模式。</li><li>如该模式需要认证或 USB Host，先完成对应外设配置。</li><li>保存设置。</li><li>必要时重启到 Controller 模式，让系统重新识别设备。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入设置或磁轴页顶部的输入模式入口。</li><li>选择目标控制器模式。</li><li>如果页面提示需要额外认证或连接手柄，按页面提示处理。</li><li>保存设置。</li><li>必要时重启到 Controller 模式，让系统重新识别设备。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>电脑或主机识别出的设备类型符合目标模式。</li><li>按键测试工具中输入正常。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>某些主机模式需要认证文件、认证手柄或 USB Host。</li><li>高级 USB 描述符只适合清楚风险时修改，错误设置可能导致模式不可用。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-110"><span class="related-reason">模式选好了</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：SettingsPage.jsx、HallEffectConfigPage.tsx</p>
+              <p class="step-hint">切换模式后电脑或主机可能会重新识别设备，短暂断开是正常现象。</p>
             </div>
           </article>
 
@@ -841,19 +879,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>进入磁轴配置页或设置页。</li><li>找到 SOCD 清理模式。</li><li>按需要选择 Up Priority、Neutral、Last Win、First Win 或 Off。</li><li>保存配置并测试左右、上下同时输入。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>同时按下相反方向时输出符合你选择的规则。</li><li>目标游戏或比赛规则允许当前 SOCD 模式。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>Off/Bypass 表示不清理相反方向输入，合规性需要自行确认。</li><li>部分平台或输入模式可能不支持 SOCD Off，会回到 Neutral。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-100"><span class="related-reason">确认方向输入</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">规则选好了</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：SettingsPage.jsx、proto/enums.proto</p>
+              <p class="step-hint">Off/Bypass 表示不清理相反方向输入，合规性需要自行确认。</p>
             </div>
           </article>
         </div>
@@ -878,19 +912,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>在磁轴配置页面打开“更多”或界面模式入口。</li><li>选择普通模式或 Pro/专业模式。</li><li>进入专业模式后再进行布局解锁、添加按键、灯光工具或自动校准表操作。</li><li>完成后可切回普通模式，减少误操作。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>专业模式下可以看到解锁、添加按键、OLED 布局、LED 工具等入口。</li><li>普通模式下危险或复杂入口被隐藏。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>专业模式会暴露更多会改变布局和硬件映射的功能，建议只在需要时打开。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-220"><span class="related-reason">要导入布局</span><span class="related-target">导入用户布局</span></a><a class="related-link" href="#step-240"><span class="related-reason">要新增按键</span><span class="related-target">添加按键</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：InterfaceMode.ts、HallEffectConfigPage.tsx</p>
+              <p class="step-hint">专业模式会暴露更多会改变布局和硬件映射的功能，建议只在需要时打开。</p>
             </div>
           </article>
 
@@ -906,19 +936,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入专业模式。</li><li>打开导入入口，选择布局或配置文件。</li><li>只导入需要的部分，避免覆盖无关设置。</li><li>导入后检查按键位置、通道、功能和灯光是否正常。</li><li>确认后保存。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入专业模式。</li><li>打开导入入口，选择布局或配置文件。</li><li>只导入需要的部分，避免覆盖无关设置。</li><li>导入后看画布位置和按键功能是否符合预期。</li><li>确认后保存。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>导入后的布局和设备实际面板一致。</li><li>没有把旧设备的通道或 GPIO 配置误带入当前设备。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>跨设备导入前建议先备份当前配置。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-230"><span class="related-reason">实体键对不上</span><span class="related-target">按键通道与引脚分配</span></a><a class="related-link" href="#step-240"><span class="related-reason">缺少按键</span><span class="related-target">添加按键</span></a><a class="related-link" href="#step-110"><span class="related-reason">导入完成</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx</p>
+              <p class="step-hint">跨设备导入前建议先备份当前配置；不确定时只导入布局相关内容。</p>
             </div>
           </article>
 
@@ -934,19 +960,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入专业模式并选择目标按键。</li><li>在属性面板中确认按键类型是 HE 通道还是 GPIO 映射。</li><li>为 HE 按键选择通道编号，或为 GPIO 按键选择对应引脚。</li><li>分配动作功能。</li><li>保存前用测试或捕获功能确认实际按键。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入专业模式并选择目标按键。</li><li>在属性面板中选择该按键对应的输入来源。</li><li>按视频给按键选择对应通道或引脚。</li><li>分配动作功能。</li><li>保存前到测试演示里按一次实体按键确认对应关系。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>按下实体按键时，画布上对应按钮被触发。</li><li>GPIO 引脚没有覆盖插件或外设正在占用的引脚。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>常规 GPIO 映射页支持 Pin Viewer 和多 Profile；磁轴页适合处理 HE 通道和画布布局。</li><li>不要随意启用“编辑插件占用引脚”一类危险选项。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-240"><span class="related-reason">还要加新键</span><span class="related-target">添加按键</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认实体键对应</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">对应关系正常</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、PinMapping.tsx</p>
+              <p class="step-hint">这是专业设置；普通用户只有在按键对应不上、布局预设无法解决时再使用。</p>
             </div>
           </article>
 
@@ -962,19 +984,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>切换到专业模式并解锁画布。</li><li>选择添加按键工具和按钮尺寸。</li><li>在画布目标位置点击添加。</li><li>为新按键设置 HE 通道或 GPIO 引脚。</li><li>设置动作功能、行程或灯光后保存。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>切换到专业模式并解锁画布。</li><li>选择添加按键工具和按钮尺寸。</li><li>在画布目标位置点击添加。</li><li>为新按键选择输入来源。</li><li>设置动作功能、行程或灯光后保存。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>新增按键位置不遮挡其他元素。</li><li>新增按键已经绑定通道/引脚和功能。</li><li>测试模式中可以正确触发。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>只添加画布按钮不等于硬件已经可用，必须完成通道或引脚分配。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-230"><span class="related-reason">新增键不能用</span><span class="related-target">按键通道与引脚分配</span></a><a class="related-link" href="#step-250"><span class="related-reason">继续改屏幕显示</span><span class="related-target">屏幕定义与布局保存</span></a><a class="related-link" href="#step-110"><span class="related-reason">新增完成</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx</p>
+              <p class="step-hint">只添加画布按钮还不能直接使用，需要继续看“按键通道与引脚分配”。</p>
             </div>
           </article>
 
@@ -990,19 +1008,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入 OLED 布局或屏幕定义编辑器。</li><li>解锁布局编辑。</li><li>添加椭圆、方形或按钮元素。</li><li>为元素绑定 HE 通道或 GPIO 动作。</li><li>检查位置、大小和显示层级。</li><li>保存自定义布局，并回到显示配置中选择使用。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入 OLED 布局或屏幕定义编辑器。</li><li>解锁布局编辑。</li><li>添加椭圆、方形或按钮元素。</li><li>为元素选择要显示的按键或方向。</li><li>检查位置、大小和显示层级。</li><li>保存自定义布局，并回到显示配置中选择使用。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>屏幕预览中的按钮位置与实际设备相符。</li><li>显示配置里已经选中自定义布局。</li><li>设备屏幕能看到输入模式、SOCD、Profile 或输入历史等需要的状态项。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>OLED 布局保存后，还需要在显示配置中启用显示并选择对应布局。</li><li>显示功能依赖 I2C 屏幕和正确的外设映射。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-110"><span class="related-reason">屏幕布局完成</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：DisplayLayoutEditor.tsx、DisplayConfig.jsx</p>
+              <p class="step-hint">OLED 布局保存后，还需要在显示配置中启用显示并选择对应布局。</p>
             </div>
           </article>
 
@@ -1018,19 +1032,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入 LED 配置或专业模式灯光工具。</li><li>确认 RGB 数据脚、LED 格式、每按钮 LED 数和最大亮度。</li><li>按实际灯带焊接顺序排列按钮 LED。</li><li>保存后观察灯效是否与实体按键顺序一致。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入 LED 配置或专业模式灯光工具。</li><li>按视频进入按键灯光顺序设置。</li><li>按实际灯带焊接顺序排列按钮 LED。</li><li>保存后观察灯效是否与实体按键顺序一致。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>第一个按钮 LED 从索引 0 开始。</li><li>灯效移动方向和实际灯带顺序一致。</li><li>玩家灯或外壳灯索引没有占用按钮灯区间。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>GP2040-CE 文档提示 RGB Button LEDs 应优先从索引 0 配置。</li><li>灯光顺序错了，颜色本身可能正常，但动态效果会错位。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-270"><span class="related-reason">顺序对了再改颜色</span><span class="related-target">按键灯光颜色设置</span></a><a class="related-link" href="#step-110"><span class="related-reason">灯位已经正确</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：LEDConfigPage.jsx、CustomThemePage.jsx</p>
+              <p class="step-hint">灯光顺序错了，颜色本身可能正常，但动态效果会错位。</p>
             </div>
           </article>
 
@@ -1046,19 +1056,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>进入专业模式并选择灯光工具，或进入自定义主题页面。</li><li>选择目标按键。</li><li>设置 Normal Color 和 Pressed Color。</li><li>需要统一颜色时可多选按键批量设置。</li><li>保存并用灯光预览或实体灯检查效果。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>松开和按下时颜色符合预期。</li><li>颜色没有因为灯光顺序错误映射到其他按键。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>如果颜色通道异常，先检查 LED Format，例如 GRB/RGB/GRBW/RGBW。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-280"><span class="related-reason">继续设置氛围灯</span><span class="related-target">氛围灯配置或预设</span></a><a class="related-link" href="#step-110"><span class="related-reason">颜色已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：LEDConfigPage.jsx、CustomThemePage.jsx</p>
+              <p class="step-hint">如果按键颜色显示到别的按键上，先回到“按键灯光顺序设置”。</p>
             </div>
           </article>
 
@@ -1074,19 +1080,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
-                  <ol><li>进入专业模式或 LED 配置的 Case RGB 区域。</li><li>选择 Off、Ambient 或 Linked 等颜色类型。</li><li>设置氛围灯起始索引和数量。</li><li>选择已有预设，或新增自定义配置。</li><li>保存后观察实体氛围灯。</li></ol>
+                  <h4>视频里做什么</h4>
+                  <ol><li>进入专业模式或 LED 配置的 Case RGB 区域。</li><li>选择 Off、Ambient 或 Linked 等颜色类型。</li><li>按视频添加氛围灯配置或套用预设。</li><li>选择已有预设，或新增自定义配置。</li><li>保存后观察实体氛围灯。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>氛围灯索引位于按钮灯之后，且没有和玩家灯冲突。</li><li>Ambient 模式下氛围灯可以独立于按钮灯工作。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>外壳 RGB 的起始索引必须按实际灯带顺序设置。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-290"><span class="related-reason">改氛围灯颜色</span><span class="related-target">氛围灯颜色设置</span></a><a class="related-link" href="#step-110"><span class="related-reason">氛围灯已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：LEDConfigPage.jsx、HallEffectConfigPage.tsx</p>
+              <p class="step-hint">只想快速使用时优先套用预设；需要细调颜色再看下一步。</p>
             </div>
           </article>
 
@@ -1102,19 +1104,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>选择已经添加的氛围灯配置。</li><li>打开颜色选择器。</li><li>设置空闲颜色或预设颜色。</li><li>保存并确认实体灯颜色。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>氛围灯颜色改变的是外壳/背景灯，不是按键灯。</li><li>颜色和亮度不会影响按键识别或供电稳定性。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>如果灯光数量较多，亮度过高可能增加供电压力；异常时先降低最大亮度。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-110"><span class="related-reason">颜色已经合适</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：LEDConfigPage.jsx</p>
+              <p class="step-hint">如果灯光数量较多，亮度过高可能增加供电压力；异常时先降低最大亮度。</p>
             </div>
           </article>
 
@@ -1130,19 +1128,15 @@
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   <ol><li>进入磁轴配置页面。</li><li>找到自动校准开关。</li><li>按需要开启或关闭。</li><li>开启后先做一次完整手动校准和测试。</li><li>保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  <ul><li>启用后按键状态仍然稳定。</li><li>如果环境或设备状态变化后，按键没有出现异常触发。</li></ul>
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  <ul><li>自动校准适合温漂或环境变化导致空闲点偏移的场景。</li><li>如果需要完全固定手感，可优先使用手动校准并关闭自动校准。</li><li>专业模式中可查看或清空自动校准保存表。</li></ul>
+                  <h4>用哪个演示继续</h4>
+                  <div class="related-row"><a class="related-link" href="#step-080"><span class="related-reason">先做手动校准</span><span class="related-target">按键校准</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认自动校准后状态</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">开关已经设好</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="evidence">依据：HallEffectConfigPage.tsx、src/addons/he_trigger.cpp</p>
+              <p class="step-hint">自动校准适合温漂或环境变化导致空闲点偏移的场景。</p>
             </div>
           </article>
         </div>

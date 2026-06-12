@@ -39,98 +39,97 @@ const topicOrder = new Map([
 const manualDetails = new Map([
   ['基础设置/设备预设', {
     title: '设备预设',
-    summary: '按设备型号套用基础配置，适合作为第一次配置或恢复标准配置的起点。',
+    summary: '按设备型号套用基础配置，视频演示的是打开设备预设并选择对应型号。',
     steps: [
       '进入磁轴配置页面，打开“设备预设”。',
       '选择与你设备型号一致的预设。',
-      '确认套用后检查按键数量、画布位置、通道和灯光是否符合当前设备。',
-      '确认无误后保存配置。'
+      '套用后回到主画布，看按钮数量和排列是否大致正确。',
+      '继续按下面的相关演示处理布局、键位或保存。'
     ],
     verify: [
       '按键数量和实际面板一致。',
       '设备预设没有把不需要的 GPIO、LED 或外设配置写入当前设备。'
     ],
     notes: [
-      '设备预设可能同时影响磁轴通道、GPIO、LED、外设等硬件段，套用前建议确认当前配置是否需要备份。'
+      '已有可用配置时先备份；第一次配置可以直接按视频套用。'
     ],
     tags: ['设备型号', '快速套用'],
     refs: ['HallEffectConfigPage.tsx', 'www/public/presets']
   }],
   ['基础设置/布局预设', {
     title: '布局预设',
-    summary: '根据实际面板布局快速生成按键位置和通道关系。',
+    summary: '根据实际面板布局快速生成按键位置，视频演示的是选择布局并套用。',
     steps: [
       '进入磁轴配置页面，打开“布局预设”。',
       '选择与外壳或键位排列一致的布局。',
-      '套用后检查每个按钮在画布上的位置和通道编号。',
-      '如果只需要调整少量键位，再进入后续按键功能或通道分配步骤。'
+      '套用后看画布上的按钮位置是否接近你的设备。',
+      '如果只是键位功能不对，继续看“按键功能调整”。'
     ],
     verify: [
       '方向键、功能键和辅助键位置清楚可辨。',
       '布局不会覆盖你已经调整好的自定义位置。'
     ],
     notes: [
-      '布局预设主要用于画布、按钮和动作关系；如果硬件通道也要跟着改变，请再检查通道分配。'
+      '普通用户优先用布局预设；只有按键对应不上时，再看进阶里的通道分配。'
     ],
     tags: ['布局', '通道关系'],
     refs: ['HallEffectConfigPage.tsx', 'www/public/presets/models']
   }],
   ['基础设置/按键功能调整', {
     title: '按键功能调整',
-    summary: '点击目标按键并修改它对应的 GP2040 动作。',
+    summary: '点击画布上的按键，修改它在手柄里的功能。',
     steps: [
       '在磁轴配置画布上选择一个按键。',
       '在右侧属性面板中选择“功能”。',
       '按需要改成方向、B1/B2、L1/R1、S1/S2、A1/A2、Fn 等动作。',
-      '逐个确认关键按键后保存。'
+      '改完后继续看测试或保存配置。'
     ],
     verify: [
       '画布上的标签和你的目标键位一致。',
       '进入测试模式后按下按键，触发状态和显示的动作一致。'
     ],
     notes: [
-      'HE 通道和 GPIO 映射都可以分配功能，但 GPIO 按键没有行程和 RT 参数。'
+      '只改按键功能时，不需要进入专业模式。'
     ],
     tags: ['按键功能', '动作映射'],
     refs: ['HallEffectConfigPage.tsx', 'proto/enums.proto']
   }],
   ['基础设置/行程触发设置/单独设置', {
     title: '单键行程触发设置',
-    summary: '只调整一个磁轴按键的总行程和触发行程，适合微调单个键的手感。',
+    summary: '只调整一个磁轴按键的总行程和触发行程，视频演示的是点按键后在弹窗里修改数值。',
     steps: [
       '选择一个 HE 按键。',
       '切换到“行程”工具。',
-      '设置总行程 Travel，通常按实际轴体行程填写。',
-      '设置触发行程 Actuation，数值不能大于总行程。',
-      '保存前先进入测试模式确认触发位置。'
+      '在弹出的行程设置窗口里修改 Travel。',
+      '再修改 Actuation。',
+      '改完后关闭窗口，继续看测试或保存配置。'
     ],
     verify: [
       '轻按到目标深度时按键开始触发。',
       '完全释放后不会残留触发状态。'
     ],
     notes: [
-      '触发行程越小越早触发，但过小会增加误触风险。',
-      'GPIO 按键不支持行程设置。'
+      'Actuation 数值越小越早触发；如果误触，调大一点再测试。'
     ],
     tags: ['Travel', 'Actuation', '单键'],
     refs: ['HallEffectConfigPage.tsx', 'proto/config.proto']
   }],
   ['基础设置/行程触发设置/批量设置', {
     title: '批量行程触发设置',
-    summary: '同时选择多个磁轴按键并统一应用 Travel 和 Actuation 参数。',
+    summary: '在“更多”菜单里批量填写 Travel 和 Actuation，视频演示的是普通界面也能看到的批量设置。',
     steps: [
-      '按住多选或框选需要统一手感的按键。',
-      '切换到“行程”工具。',
-      '输入总行程和触发行程。',
-      '批量应用后逐个测试常用方向键或攻击键。',
-      '确认无误后保存。'
+      '打开顶部“更多”菜单。',
+      '保持或切到“普通”界面。',
+      '在批量设置里填写行程和触发行程。',
+      '点击“批量应用行程/触发”。',
+      '继续看 RT 设置、测试或保存配置。'
     ],
     verify: [
       '同组按键触发手感一致。',
       '没有把不需要调整的按键一起选中。'
     ],
     notes: [
-      '批量设置会覆盖所选按键原有参数，适合 WASD、方向键或同规格按键统一设置。'
+      '批量应用会把所选按键改成同一组行程参数，适合 WASD、方向键等需要统一手感的按键。'
     ],
     tags: ['Travel', '批量'],
     refs: ['HallEffectConfigPage.tsx']
@@ -184,7 +183,7 @@ const manualDetails = new Map([
       '保持所有按键松开，等待空闲采样完成。',
       '按界面提示逐个按下目标按键到最大行程。',
       '等待系统记录按下点后松开。',
-      '全部完成后检查状态，再进入保存校准结果。'
+      '全部完成后看页面状态，再进入保存校准结果。'
     ],
     verify: [
       '空闲状态下按键不触发。',
@@ -193,7 +192,7 @@ const manualDetails = new Map([
     ],
     notes: [
       '校准时不要压着其他按键。',
-      '如果某个键状态异常，重新校准该键或先检查通道/引脚分配。'
+      '如果某个键状态异常，先重新校准该键；仍不正常时再看进阶通道分配。'
     ],
     tags: ['磁轴校准', '空闲点', '按下点'],
     refs: ['HallEffectConfigPage.tsx', 'WebApi.js', 'src/webconfig.cpp']
@@ -263,7 +262,7 @@ const manualDetails = new Map([
     steps: [
       '进入设置或磁轴页顶部的输入模式入口。',
       '选择目标控制器模式。',
-      '如该模式需要认证或 USB Host，先完成对应外设配置。',
+      '如果页面提示需要额外认证或连接手柄，按页面提示处理。',
       '保存设置。',
       '必要时重启到 Controller 模式，让系统重新识别设备。'
     ],
@@ -272,8 +271,7 @@ const manualDetails = new Map([
       '按键测试工具中输入正常。'
     ],
     notes: [
-      '某些主机模式需要认证文件、认证手柄或 USB Host。',
-      '高级 USB 描述符只适合清楚风险时修改，错误设置可能导致模式不可用。'
+      '切换模式后电脑或主机可能会重新识别设备，短暂断开是正常现象。'
     ],
     tags: ['Input Mode', '控制器模式'],
     refs: ['SettingsPage.jsx', 'HallEffectConfigPage.tsx']
@@ -324,7 +322,7 @@ const manualDetails = new Map([
       '进入专业模式。',
       '打开导入入口，选择布局或配置文件。',
       '只导入需要的部分，避免覆盖无关设置。',
-      '导入后检查按键位置、通道、功能和灯光是否正常。',
+      '导入后看画布位置和按键功能是否符合预期。',
       '确认后保存。'
     ],
     verify: [
@@ -332,7 +330,7 @@ const manualDetails = new Map([
       '没有把旧设备的通道或 GPIO 配置误带入当前设备。'
     ],
     notes: [
-      '跨设备导入前建议先备份当前配置。'
+      '跨设备导入前建议先备份当前配置；不确定时只导入布局相关内容。'
     ],
     tags: ['导入', '自定义布局'],
     refs: ['HallEffectConfigPage.tsx']
@@ -342,18 +340,17 @@ const manualDetails = new Map([
     summary: '为按键分配磁轴通道或 GPIO 引脚，解决硬件线路和画布按钮之间的对应关系。',
     steps: [
       '进入专业模式并选择目标按键。',
-      '在属性面板中确认按键类型是 HE 通道还是 GPIO 映射。',
-      '为 HE 按键选择通道编号，或为 GPIO 按键选择对应引脚。',
+      '在属性面板中选择该按键对应的输入来源。',
+      '按视频给按键选择对应通道或引脚。',
       '分配动作功能。',
-      '保存前用测试或捕获功能确认实际按键。'
+      '保存前到测试演示里按一次实体按键确认对应关系。'
     ],
     verify: [
       '按下实体按键时，画布上对应按钮被触发。',
       'GPIO 引脚没有覆盖插件或外设正在占用的引脚。'
     ],
     notes: [
-      '常规 GPIO 映射页支持 Pin Viewer 和多 Profile；磁轴页适合处理 HE 通道和画布布局。',
-      '不要随意启用“编辑插件占用引脚”一类危险选项。'
+      '这是专业设置；普通用户只有在按键对应不上、布局预设无法解决时再使用。'
     ],
     tags: ['HE 通道', 'GPIO', '引脚'],
     refs: ['HallEffectConfigPage.tsx', 'PinMapping.tsx']
@@ -365,7 +362,7 @@ const manualDetails = new Map([
       '切换到专业模式并解锁画布。',
       '选择添加按键工具和按钮尺寸。',
       '在画布目标位置点击添加。',
-      '为新按键设置 HE 通道或 GPIO 引脚。',
+      '为新按键选择输入来源。',
       '设置动作功能、行程或灯光后保存。'
     ],
     verify: [
@@ -374,7 +371,7 @@ const manualDetails = new Map([
       '测试模式中可以正确触发。'
     ],
     notes: [
-      '只添加画布按钮不等于硬件已经可用，必须完成通道或引脚分配。'
+      '只添加画布按钮还不能直接使用，需要继续看“按键通道与引脚分配”。'
     ],
     tags: ['画布编辑', '新增按键'],
     refs: ['HallEffectConfigPage.tsx']
@@ -386,7 +383,7 @@ const manualDetails = new Map([
       '进入 OLED 布局或屏幕定义编辑器。',
       '解锁布局编辑。',
       '添加椭圆、方形或按钮元素。',
-      '为元素绑定 HE 通道或 GPIO 动作。',
+      '为元素选择要显示的按键或方向。',
       '检查位置、大小和显示层级。',
       '保存自定义布局，并回到显示配置中选择使用。'
     ],
@@ -396,8 +393,7 @@ const manualDetails = new Map([
       '设备屏幕能看到输入模式、SOCD、Profile 或输入历史等需要的状态项。'
     ],
     notes: [
-      'OLED 布局保存后，还需要在显示配置中启用显示并选择对应布局。',
-      '显示功能依赖 I2C 屏幕和正确的外设映射。'
+      'OLED 布局保存后，还需要在显示配置中启用显示并选择对应布局。'
     ],
     tags: ['OLED', '自定义布局', '保存'],
     refs: ['DisplayLayoutEditor.tsx', 'DisplayConfig.jsx']
@@ -407,7 +403,7 @@ const manualDetails = new Map([
     summary: '设置 RGB 按键灯在灯带链路中的顺序，影响流水、渐变和按键灯效对应关系。',
     steps: [
       '进入 LED 配置或专业模式灯光工具。',
-      '确认 RGB 数据脚、LED 格式、每按钮 LED 数和最大亮度。',
+      '按视频进入按键灯光顺序设置。',
       '按实际灯带焊接顺序排列按钮 LED。',
       '保存后观察灯效是否与实体按键顺序一致。'
     ],
@@ -417,7 +413,6 @@ const manualDetails = new Map([
       '玩家灯或外壳灯索引没有占用按钮灯区间。'
     ],
     notes: [
-      'GP2040-CE 文档提示 RGB Button LEDs 应优先从索引 0 配置。',
       '灯光顺序错了，颜色本身可能正常，但动态效果会错位。'
     ],
     tags: ['LED 顺序', 'RGB 链路'],
@@ -438,7 +433,7 @@ const manualDetails = new Map([
       '颜色没有因为灯光顺序错误映射到其他按键。'
     ],
     notes: [
-      '如果颜色通道异常，先检查 LED Format，例如 GRB/RGB/GRBW/RGBW。'
+      '如果按键颜色显示到别的按键上，先回到“按键灯光顺序设置”。'
     ],
     tags: ['按键灯', '颜色'],
     refs: ['LEDConfigPage.jsx', 'CustomThemePage.jsx']
@@ -449,7 +444,7 @@ const manualDetails = new Map([
     steps: [
       '进入专业模式或 LED 配置的 Case RGB 区域。',
       '选择 Off、Ambient 或 Linked 等颜色类型。',
-      '设置氛围灯起始索引和数量。',
+      '按视频添加氛围灯配置或套用预设。',
       '选择已有预设，或新增自定义配置。',
       '保存后观察实体氛围灯。'
     ],
@@ -458,7 +453,7 @@ const manualDetails = new Map([
       'Ambient 模式下氛围灯可以独立于按钮灯工作。'
     ],
     notes: [
-      '外壳 RGB 的起始索引必须按实际灯带顺序设置。'
+      '只想快速使用时优先套用预设；需要细调颜色再看下一步。'
     ],
     tags: ['氛围灯', 'Case RGB', '预设'],
     refs: ['LEDConfigPage.jsx', 'HallEffectConfigPage.tsx']
@@ -533,6 +528,179 @@ const externalReferences = [
   ['GP2040-CE LED Configuration', 'https://gp2040-ce.info/web-configurator/menu-pages/led-configuration/'],
   ['GP2040-CE Display Configuration', 'https://gp2040-ce.info/web-configurator/menu-pages/display-configuration/'],
   ['OpenStickCommunity GP2040-CE GitHub', 'https://github.com/OpenStickCommunity/GP2040-CE'],
+];
+
+const relatedTopics = new Map([
+  ['基础设置/设备预设', [
+    '基础设置/布局预设',
+    '基础设置/按键功能调整',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/布局预设', [
+    '基础设置/按键功能调整',
+    '基础设置/行程触发设置/单独设置',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/按键功能调整', [
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/行程触发设置/单独设置', [
+    '基础设置/行程触发设置/批量设置',
+    '基础设置/rt功能设置/单独设置',
+    '基础设置/rt行程校准测试',
+  ]],
+  ['基础设置/行程触发设置/批量设置', [
+    '基础设置/rt功能设置/批量设置',
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/rt功能设置/单独设置', [
+    '基础设置/rt功能设置/批量设置',
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/rt功能设置/批量设置', [
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/按键校准', [
+    '基础设置/按键校准/保存配置',
+    '基础设置/rt行程校准测试',
+  ]],
+  ['基础设置/按键校准/保存配置', [
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/rt行程校准测试', [
+    '基础设置/行程触发设置/单独设置',
+    '基础设置/rt功能设置/单独设置',
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/保存配置', [
+    '基础设置/控制器模式切换',
+    '基础设置/SOCD模式切换',
+  ]],
+  ['基础设置/控制器模式切换', [
+    '基础设置/保存配置',
+  ]],
+  ['基础设置/SOCD模式切换', [
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/切换用户模式', [
+    '进阶/定制用户布局部分导入',
+    '进阶/添加按键',
+  ]],
+  ['进阶/定制用户布局部分导入', [
+    '进阶/按键通道引脚分配',
+    '进阶/添加按键',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/按键通道引脚分配', [
+    '进阶/添加按键',
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/添加按键', [
+    '进阶/按键通道引脚分配',
+    '进阶/屏幕定义/修改通道添加按键保存',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/屏幕定义/修改通道添加按键保存', [
+    '基础设置/保存配置',
+  ]],
+  ['进阶/灯光颜色设置/按键灯光设置/灯光设置顺序设置', [
+    '进阶/灯光颜色设置/按键灯光设置/按键颜色设置',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/灯光颜色设置/按键灯光设置/按键颜色设置', [
+    '进阶/灯光颜色设置/氛围灯设置/添加配置或者使用预设',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/灯光颜色设置/氛围灯设置/添加配置或者使用预设', [
+    '进阶/灯光颜色设置/氛围灯设置/颜色设置',
+    '基础设置/保存配置',
+  ]],
+  ['进阶/灯光颜色设置/氛围灯设置/颜色设置', [
+    '基础设置/保存配置',
+  ]],
+  ['进阶/自动校准', [
+    '基础设置/按键校准',
+    '基础设置/rt行程校准测试',
+    '基础设置/保存配置',
+  ]],
+]);
+
+const relatedLinkLabels = new Map([
+  ['基础设置/设备预设=>基础设置/布局预设', '按键位置不对'],
+  ['基础设置/设备预设=>基础设置/按键功能调整', '按键功能不对'],
+  ['基础设置/设备预设=>基础设置/保存配置', '已经可以用了'],
+  ['基础设置/布局预设=>基础设置/按键功能调整', '键位功能不对'],
+  ['基础设置/布局预设=>基础设置/行程触发设置/单独设置', '想调手感'],
+  ['基础设置/布局预设=>基础设置/保存配置', '布局已经合适'],
+  ['基础设置/按键功能调整=>基础设置/rt行程校准测试', '确认按键是否生效'],
+  ['基础设置/按键功能调整=>基础设置/保存配置', '功能已经改好'],
+  ['基础设置/行程触发设置/单独设置=>基础设置/行程触发设置/批量设置', '多个键一起调'],
+  ['基础设置/行程触发设置/单独设置=>基础设置/rt功能设置/单独设置', '继续调 RT'],
+  ['基础设置/行程触发设置/单独设置=>基础设置/rt行程校准测试', '确认触发位置'],
+  ['基础设置/行程触发设置/批量设置=>基础设置/rt功能设置/批量设置', '批量调 RT'],
+  ['基础设置/行程触发设置/批量设置=>基础设置/rt行程校准测试', '确认手感'],
+  ['基础设置/行程触发设置/批量设置=>基础设置/保存配置', '参数已经合适'],
+  ['基础设置/rt功能设置/单独设置=>基础设置/rt功能设置/批量设置', '多个键一起调 RT'],
+  ['基础设置/rt功能设置/单独设置=>基础设置/rt行程校准测试', '确认 RT 是否正常'],
+  ['基础设置/rt功能设置/单独设置=>基础设置/保存配置', 'RT 已经合适'],
+  ['基础设置/rt功能设置/批量设置=>基础设置/rt行程校准测试', '确认批量设置效果'],
+  ['基础设置/rt功能设置/批量设置=>基础设置/保存配置', 'RT 已经合适'],
+  ['基础设置/按键校准=>基础设置/按键校准/保存配置', '校准后别丢失'],
+  ['基础设置/按键校准=>基础设置/rt行程校准测试', '校准后测试'],
+  ['基础设置/按键校准/保存配置=>基础设置/rt行程校准测试', '确认校准效果'],
+  ['基础设置/按键校准/保存配置=>基础设置/保存配置', '写入最终配置'],
+  ['基础设置/rt行程校准测试=>基础设置/行程触发设置/单独设置', '太早或太晚触发'],
+  ['基础设置/rt行程校准测试=>基础设置/rt功能设置/单独设置', 'RT 不跟手'],
+  ['基础设置/rt行程校准测试=>基础设置/保存配置', '测试正常'],
+  ['基础设置/保存配置=>基础设置/控制器模式切换', '要换输入模式'],
+  ['基础设置/保存配置=>基础设置/SOCD模式切换', '要改方向规则'],
+  ['基础设置/控制器模式切换=>基础设置/保存配置', '模式选好了'],
+  ['基础设置/SOCD模式切换=>基础设置/rt行程校准测试', '确认方向输入'],
+  ['基础设置/SOCD模式切换=>基础设置/保存配置', '规则选好了'],
+  ['进阶/切换用户模式=>进阶/定制用户布局部分导入', '要导入布局'],
+  ['进阶/切换用户模式=>进阶/添加按键', '要新增按键'],
+  ['进阶/定制用户布局部分导入=>进阶/按键通道引脚分配', '实体键对不上'],
+  ['进阶/定制用户布局部分导入=>进阶/添加按键', '缺少按键'],
+  ['进阶/定制用户布局部分导入=>基础设置/保存配置', '导入完成'],
+  ['进阶/按键通道引脚分配=>进阶/添加按键', '还要加新键'],
+  ['进阶/按键通道引脚分配=>基础设置/rt行程校准测试', '确认实体键对应'],
+  ['进阶/按键通道引脚分配=>基础设置/保存配置', '对应关系正常'],
+  ['进阶/添加按键=>进阶/按键通道引脚分配', '新增键不能用'],
+  ['进阶/添加按键=>进阶/屏幕定义/修改通道添加按键保存', '继续改屏幕显示'],
+  ['进阶/添加按键=>基础设置/保存配置', '新增完成'],
+  ['进阶/屏幕定义/修改通道添加按键保存=>基础设置/保存配置', '屏幕布局完成'],
+  ['进阶/灯光颜色设置/按键灯光设置/灯光设置顺序设置=>进阶/灯光颜色设置/按键灯光设置/按键颜色设置', '顺序对了再改颜色'],
+  ['进阶/灯光颜色设置/按键灯光设置/灯光设置顺序设置=>基础设置/保存配置', '灯位已经正确'],
+  ['进阶/灯光颜色设置/按键灯光设置/按键颜色设置=>进阶/灯光颜色设置/氛围灯设置/添加配置或者使用预设', '继续设置氛围灯'],
+  ['进阶/灯光颜色设置/按键灯光设置/按键颜色设置=>基础设置/保存配置', '颜色已经合适'],
+  ['进阶/灯光颜色设置/氛围灯设置/添加配置或者使用预设=>进阶/灯光颜色设置/氛围灯设置/颜色设置', '改氛围灯颜色'],
+  ['进阶/灯光颜色设置/氛围灯设置/添加配置或者使用预设=>基础设置/保存配置', '氛围灯已经合适'],
+  ['进阶/灯光颜色设置/氛围灯设置/颜色设置=>基础设置/保存配置', '颜色已经合适'],
+  ['进阶/自动校准=>基础设置/按键校准', '先做手动校准'],
+  ['进阶/自动校准=>基础设置/rt行程校准测试', '确认自动校准后状态'],
+  ['进阶/自动校准=>基础设置/保存配置', '开关已经设好'],
+]);
+
+const issueGuide = [
+  ['第一次配置', '基础设置/设备预设'],
+  ['按键位置不对', '基础设置/布局预设'],
+  ['按键功能不对', '基础设置/按键功能调整'],
+  ['按了实体键，画面不是这个键', '进阶/按键通道引脚分配'],
+  ['一个键太灵敏或不触发', '基础设置/行程触发设置/单独设置'],
+  ['多个键一起调手感', '基础设置/行程触发设置/批量设置'],
+  ['RT 不跟手', '基础设置/rt功能设置/单独设置'],
+  ['校准后怕丢失', '基础设置/按键校准/保存配置'],
+  ['最后确认有没有成功', '基础设置/rt行程校准测试'],
+  ['灯亮到别的按键上', '进阶/灯光颜色设置/按键灯光设置/灯光设置顺序设置'],
+  ['颜色不对', '进阶/灯光颜色设置/按键灯光设置/按键颜色设置'],
+  ['加了新按键但不能用', '进阶/按键通道引脚分配'],
 ];
 
 function assertInside(parent, child) {
@@ -627,11 +795,49 @@ function renderTags(tags) {
     .join('');
 }
 
-function renderStep(entry) {
+function renderRelatedLinks(entry, entryByTopic) {
+  const topics = relatedTopics.get(entry.topic) || [];
+  const links = topics
+    .map((topic) => entryByTopic.get(topic))
+    .filter(Boolean)
+    .map((target) => {
+      const label = relatedLinkLabels.get(`${entry.topic}=>${target.topic}`) || '继续看';
+      return `<a class="related-link" href="#${target.id}"><span class="related-reason">${htmlEscape(label)}</span><span class="related-target">${htmlEscape(target.title)}</span></a>`;
+    })
+    .join('');
+
+  if (!links) {
+    return '';
+  }
+
+  return `<div class="related-row">${links}</div>`;
+}
+
+function renderIssueGuide(entries) {
+  const entryByTopic = new Map(entries.map((entry) => [entry.topic, entry]));
+  const links = issueGuide
+    .map(([label, topic]) => {
+      const target = entryByTopic.get(topic);
+      if (!target) return '';
+      return `<a class="issue-link" href="#${target.id}"><span>${htmlEscape(label)}</span><strong>${htmlEscape(target.title)}</strong></a>`;
+    })
+    .join('');
+
+  return `
+      <section class="guide-section" id="guide">
+        <div class="section-head">
+          <h2>按问题找演示</h2>
+          <p>不知道下一步点哪里时，先按你遇到的问题跳到对应视频。</p>
+        </div>
+        <div class="issue-grid">
+          ${links}
+        </div>
+      </section>`;
+}
+
+function renderStep(entry, entryByTopic) {
   const detail = entry.detail;
   const notes = detail.notes || [];
-  const verify = detail.verify || [];
-  const refs = detail.refs || [];
 
   return `
           <article class="step" id="${entry.id}">
@@ -646,28 +852,25 @@ function renderStep(entry) {
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
-                  <h4>操作流程</h4>
+                  <h4>视频里做什么</h4>
                   ${renderList(detail.steps, true)}
                 </div>
                 <div class="detail-block">
-                  <h4>完成后检查</h4>
-                  ${renderList(verify)}
-                </div>
-                <div class="detail-block detail-block--wide">
-                  <h4>注意事项</h4>
-                  ${renderList(notes)}
+                  <h4>用哪个演示继续</h4>
+                  ${renderRelatedLinks(entry, entryByTopic)}
                 </div>
               </div>
-              <p class="evidence">依据：${refs.map(htmlEscape).join('、') || '项目源码和录屏流程'}</p>
+              ${notes.length ? `<p class="step-hint">${htmlEscape(notes[0])}</p>` : ''}
             </div>
           </article>`;
 }
 
-function renderSteps(entries) {
-  return entries.map(renderStep).join('\n');
+function renderSteps(entries, allEntries = entries) {
+  const entryByTopic = new Map(allEntries.map((entry) => [entry.topic, entry]));
+  return entries.map((entry) => renderStep(entry, entryByTopic)).join('\n');
 }
 
-function renderSection(section, entries) {
+function renderSection(section, entries, allEntries) {
   const id = section === '基础设置' ? 'basic' : 'advanced';
   const title = section === '进阶' ? '进阶设置' : section;
   const description = section === '基础设置'
@@ -681,7 +884,7 @@ function renderSection(section, entries) {
           <p>${description}</p>
         </div>
         <div class="steps">
-${renderSteps(entries)}
+${renderSteps(entries, allEntries)}
         </div>
       </section>`;
 }
@@ -887,6 +1090,7 @@ function renderIndex(entries) {
     }
 
     section,
+    .guide-section,
     .reference-section {
       scroll-margin-top: 16px;
       border: 1px solid var(--line);
@@ -1018,10 +1222,6 @@ function renderIndex(entries) {
       border-top: 1px solid var(--line);
     }
 
-    .detail-block--wide {
-      grid-column: 1 / -1;
-    }
-
     .detail-block h4 {
       margin: 0 0 6px;
       color: #344054;
@@ -1041,10 +1241,86 @@ function renderIndex(entries) {
       margin-top: 3px;
     }
 
-    .evidence {
-      margin: 12px 0 0;
-      color: #7a8795;
+    .related-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .related-link {
+      display: grid;
+      gap: 2px;
+      align-items: start;
+      min-height: 28px;
+      padding: 7px 10px;
+      border: 1px solid #b8d9d8;
+      border-radius: 7px;
+      background: var(--accent-soft);
+      color: var(--ink);
+    }
+
+    .related-link:hover,
+    .related-link:focus-visible {
+      border-color: var(--accent);
+      background: #d4efee;
+      outline: none;
+    }
+
+    .related-reason {
+      color: #087174;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .related-target {
+      color: var(--muted);
       font-size: 12px;
+    }
+
+    .step-hint {
+      margin: 12px 0 0;
+      padding: 8px 10px;
+      border-left: 3px solid #f2c98b;
+      background: #fffaf1;
+      color: #6f4b15;
+      font-size: 13px;
+    }
+
+    .issue-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px 22px 20px;
+    }
+
+    .issue-link {
+      display: grid;
+      gap: 4px;
+      min-height: 70px;
+      align-content: center;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .issue-link:hover,
+    .issue-link:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .issue-link span {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .issue-link strong {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .reference-body {
@@ -1105,6 +1381,7 @@ function renderIndex(entries) {
       }
 
       .detail-grid,
+      .issue-grid,
       .reference-body {
         grid-template-columns: 1fr;
       }
@@ -1123,6 +1400,7 @@ function renderIndex(entries) {
 
       .section-head,
       .steps,
+      .issue-grid,
       .reference-body {
         padding-left: 14px;
         padding-right: 14px;
@@ -1143,10 +1421,10 @@ function renderIndex(entries) {
     <div class="header-inner">
       <p class="eyebrow">Tikitaka 配置工具</p>
       <h1>Tikitaka 使用说明</h1>
-      <p class="intro">说明页面根据录屏目录自动排序生成，并按项目源码补全操作流程、检查点和注意事项。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
-      <p class="source-note">${sourceNotes.map(htmlEscape).join(' ')}</p>
+      <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
+        <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
         <a href="#advanced">进阶设置</a>
         <a href="#references">参考资料</a>
@@ -1157,6 +1435,7 @@ function renderIndex(entries) {
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
+      <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
 ${basic.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEscape(entry.title)}</a>`).join('\n')}
       <a href="#advanced">进阶设置</a>
@@ -1165,8 +1444,9 @@ ${advanced.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEsca
     </aside>
 
     <div class="content">
-${renderSection('基础设置', basic)}
-${renderSection('进阶', advanced)}
+${renderIssueGuide(entries)}
+${renderSection('基础设置', basic, entries)}
+${renderSection('进阶', advanced, entries)}
       <section class="reference-section" id="references">
         <div class="section-head">
           <h2>参考资料</h2>
@@ -1324,7 +1604,7 @@ function renderReadme(entries) {
 
   return `# Tikitaka 使用说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并按项目源码补全详细流程。
+这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。
 
 ## 在线说明网站
 
