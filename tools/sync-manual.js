@@ -839,6 +839,60 @@ function renderIssueGuide(entries) {
       </section>`;
 }
 
+function renderStartChoice() {
+  return `
+      <section class="choice-section" id="start">
+        <div class="section-head">
+          <h2>先选你要哪种帮助</h2>
+          <p>不确定就选“只想开始用”。这里先解决能不能用，完整说明再放到后面慢慢看。</p>
+        </div>
+        <div class="choice-grid">
+          <a class="choice-card primary" href="#quickstart">
+            <span>使用需求</span>
+            <strong>只想开始用</strong>
+            <p>按最少步骤完成配置、测试和保存，不要求理解全部原理。</p>
+          </a>
+          <a class="choice-card" href="#guide">
+            <span>理解需求</span>
+            <strong>看完整说明</strong>
+            <p>按问题或功能查看全部演示，包含高级功能、注意事项和内部说明口径。</p>
+          </a>
+        </div>
+      </section>`;
+}
+
+function renderQuickStart(entries) {
+  const entryByTopic = new Map(entries.map((entry) => [entry.topic, entry]));
+  const flow = [
+    ['选设备', '先套用设备型号，拿到基础配置。', '基础设置/设备预设'],
+    ['选布局', '按你的面板确认按键排列。', '基础设置/布局预设'],
+    ['校准按键', '让设备知道每个磁轴的起点和终点。', '基础设置/按键校准'],
+    ['测试输入', '按一遍按键，确认触发、释放和行程正常。', '基础设置/rt行程校准测试'],
+    ['保存配置', '测试没问题就写入设备。', '基础设置/保存配置'],
+  ];
+  const cards = flow
+    .map(([title, text, topic], index) => {
+      const target = entryByTopic.get(topic);
+      if (!target) return '';
+      return `<a class="flow-card" href="#${target.id}"><span class="flow-index">${String(index + 1).padStart(2, '0')}</span><span><strong>${htmlEscape(title)}</strong><em>${htmlEscape(text)}</em><small>${htmlEscape(target.title)}</small></span></a>`;
+    })
+    .join('');
+
+  return `
+      <section class="quickstart-section" id="quickstart">
+        <div class="section-head">
+          <h2>简化引导</h2>
+          <p>第一次使用或只想先跑起来，按这 5 步走。能正常测试就保存，后面有需求再看完整说明。</p>
+        </div>
+        <div class="flow-list">
+          ${cards}
+        </div>
+        <div class="quickstart-note">
+          <strong>简单判断：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置；手感、灯光、专业模式以后再调。
+        </div>
+      </section>`;
+}
+
 function renderStep(entry, entryByTopic) {
   const detail = entry.detail;
   const notes = detail.notes || [];
@@ -1121,6 +1175,126 @@ function renderIndex(entries) {
       font-size: 14px;
     }
 
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px 22px 20px;
+    }
+
+    .choice-card {
+      display: grid;
+      gap: 6px;
+      min-height: 132px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .choice-card.primary {
+      border-color: #9fd6d4;
+      background: var(--accent-soft);
+    }
+
+    .choice-card:hover,
+    .choice-card:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
+      outline: none;
+    }
+
+    .choice-card span {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .choice-card strong {
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .choice-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .flow-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px 22px 14px;
+    }
+
+    .flow-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      min-height: 128px;
+      padding: 12px;
+      border: 1px solid #b8d9d8;
+      border-radius: 8px;
+      background: #f2fbfa;
+    }
+
+    .flow-card:hover,
+    .flow-card:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .flow-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 31px;
+      height: 24px;
+      border: 1px solid #9fd6d4;
+      border-radius: 6px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flow-card strong,
+    .flow-card em,
+    .flow-card small {
+      display: block;
+      font-style: normal;
+      line-height: 1.38;
+    }
+
+    .flow-card strong {
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .flow-card em {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .flow-card small {
+      margin-top: 7px;
+      color: #087174;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .quickstart-note {
+      margin: 0 22px 20px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent);
+      background: #f5fbfb;
+      color: #344054;
+      font-size: 13px;
+    }
+
     .steps {
       display: grid;
       gap: 26px;
@@ -1385,8 +1559,13 @@ function renderIndex(entries) {
       }
 
       .detail-grid,
+      .choice-grid,
       .issue-grid,
       .reference-body {
+        grid-template-columns: 1fr;
+      }
+
+      .flow-list {
         grid-template-columns: 1fr;
       }
 
@@ -1404,10 +1583,17 @@ function renderIndex(entries) {
 
       .section-head,
       .steps,
+      .choice-grid,
+      .flow-list,
       .issue-grid,
       .reference-body {
         padding-left: 14px;
         padding-right: 14px;
+      }
+
+      .quickstart-note {
+        margin-left: 14px;
+        margin-right: 14px;
       }
 
       .step-body {
@@ -1428,6 +1614,8 @@ function renderIndex(entries) {
       <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
+        <a href="#start">选择模式</a>
+        <a href="#quickstart">简化引导</a>
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
         <a href="#advanced">进阶设置</a>
@@ -1439,6 +1627,8 @@ function renderIndex(entries) {
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
+      <a href="#start">选择模式</a>
+      <a href="#quickstart">简化引导</a>
       <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
 ${basic.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEscape(entry.title)}</a>`).join('\n')}
@@ -1448,6 +1638,8 @@ ${advanced.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEsca
     </aside>
 
     <div class="content">
+${renderStartChoice()}
+${renderQuickStart(entries)}
 ${renderIssueGuide(entries)}
 ${renderSection('基础设置', basic, entries)}
 ${renderSection('进阶', advanced, entries)}
@@ -1614,7 +1806,7 @@ function renderReadme(entries) {
 
   return `# Tikitaka 使用说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
+这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。首页提供“简化引导”和“完整说明”两个入口：普通用户可按 5 步先用起来，内部交流或完整理解再看全部说明。
 
 ## 在线说明网站
 
