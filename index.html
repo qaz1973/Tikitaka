@@ -1123,20 +1123,20 @@
             <div class="step-body">
               <div class="step-summary">
                 <h3>自动校准</h3>
-                <p>启动或连接后自动读取当前磁轴空闲状态并更新校准补偿，减少环境变化带来的偏移、误触或断触；一般保持默认开启。</p>
+                <p>开机或连接后预留约 3 秒初始化时间，自动读取当前磁轴空闲状态并更新校准补偿；用于多平台切换时保证输入稳定，一般保持默认开启。</p>
                 <div class="tag-row"><span class="tag">自动校准</span><span class="tag alt">默认开启</span></div>
               </div>
               <div class="detail-grid">
                 <div class="detail-block">
                   <h4>视频里做什么</h4>
-                  <ol><li>进入磁轴配置页面。</li><li>找到自动校准开关。</li><li>普通使用保持开启。</li><li>连接设备或重启后，先等待初始化完成，再开始测试按键。</li><li>如果要做特殊调试、固定手感，或确认自动校准影响使用，再考虑关闭。</li><li>保存配置。</li></ol>
+                  <ol><li>进入磁轴配置页面。</li><li>找到自动校准开关。</li><li>普通使用保持开启。</li><li>开机、重启或连接设备后，等待约 3 秒初始化完成，再开始测试按键。</li><li>这个等待用于应对 PC、主机、Switch、XInput 等多平台切换场景，让设备先稳定磁轴基线和输入识别。</li><li>如果要做特殊调试、固定手感，或确认自动校准影响使用，再考虑关闭。</li><li>保存配置。</li></ol>
                 </div>
                 <div class="detail-block">
                   <h4>用哪个演示继续</h4>
                   <div class="related-row"><a class="related-link" href="#step-080"><span class="related-reason">先做手动校准</span><span class="related-target">按键校准</span></a><a class="related-link" href="#step-100"><span class="related-reason">确认自动校准后状态</span><span class="related-target">RT 与行程测试</span></a><a class="related-link" href="#step-110"><span class="related-reason">开关已经设好</span><span class="related-target">保存配置到设备</span></a></div>
                 </div>
               </div>
-              <p class="step-hint">工作逻辑：开启后设备会在启动或连接时参考当前磁轴空闲点，自动更新校准补偿，避免温度、磁体位置或环境变化造成读数偏移；因此连接或重启后初始化可能稍慢，等待完成再测试即可。</p>
+              <p class="step-hint">目的说明：自动校准会让开机/连接初始化增加约 3 秒，用这段时间读取当前磁轴空闲点并更新补偿，主要是为了应对同一设备在 PC、主机、Switch 等平台之间切换后环境和识别状态变化，减少漂移、误触、断触或第一次连接不稳定的问题。</p>
             </div>
           </article>
         </div>
