@@ -949,7 +949,6 @@ function renderGuideStep(entry, nextEntry) {
               </details>` : ''}
               <div class="guide-actions">
                 ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#quickstart">回到主流程</a>`}
-                <a href="manual.html#${entry.id}">完整说明</a>
               </div>
             </div>
           </article>`;
@@ -1826,7 +1825,6 @@ function renderGuidePage(entries) {
         <a href="#guide">按问题跳转</a>
         <a href="#basic">基础流程</a>
         <a href="#advanced">进阶功能</a>
-        <a href="manual.html#guide">完整内部说明</a>
       </nav>
     </div>
   </header>
@@ -1836,9 +1834,6 @@ ${renderQuickStart(entries)}
 ${renderGuideIssueLinks(entries)}
 ${renderGuideSection('基础设置', basic, entries)}
 ${renderGuideSection('进阶', advanced, entries)}
-    <section class="reference-lite" id="references">
-      需要源码依据、风险解释或内部交流口径时，查看 <a href="manual.html#references">完整内部说明</a>。
-    </section>
   </main>
 
   <footer class="footer">Tikitaka 使用说明 · 共 ${entries.length} 个视频演示</footer>
@@ -2882,18 +2877,12 @@ function renderReadme(entries) {
 
 这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
 
-首页 \`index.html\` 是面向用户的使用说明，覆盖全部视频，但默认只展示照做步骤；检查点、注意事项和内部解释按需展开或进入 \`manual.html\` 查看。
+首页 \`index.html\` 是唯一发布的使用说明界面，覆盖全部视频。页面默认只展示照做步骤，检查点和注意事项按需展开。
 
 ## 在线说明网站
 
 \`\`\`text
 https://qaz1973.github.io/Tikitaka/
-\`\`\`
-
-完整内部说明页：
-
-\`\`\`text
-https://qaz1973.github.io/Tikitaka/manual.html
 \`\`\`
 
 ## 同步录屏
@@ -2910,7 +2899,7 @@ D:\\2\\说明书视频文件部分
 node tools/sync-manual.js
 \`\`\`
 
-同步后会更新 \`index.html\`、\`manual.html\`、\`README.md\`，并同步 \`videos/\`。
+同步后会更新 \`index.html\`、\`README.md\`，并同步 \`videos/\`。
 
 也可以指定其他来源目录：
 
@@ -2986,7 +2975,6 @@ const entries = makeEntries();
 copyVideos(entries);
 
 fs.writeFileSync(path.join(repoRoot, 'index.html'), renderGuidePage(entries), 'utf8');
-fs.writeFileSync(path.join(repoRoot, 'manual.html'), renderManualPage(entries), 'utf8');
 fs.writeFileSync(path.join(repoRoot, 'README.md'), renderReadme(entries), 'utf8');
 
 console.log(`Synced ${entries.length} video steps from ${sourceRoot}`);
