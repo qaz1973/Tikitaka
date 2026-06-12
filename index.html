@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tikitaka 说明入口</title>
+  <title>Tikitaka 简化说明</title>
   <style>
     :root {
       color-scheme: light;
@@ -24,9 +24,12 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
-      min-height: 100vh;
       background: var(--bg);
       color: var(--ink);
       font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
@@ -40,13 +43,24 @@
       text-decoration: none;
     }
 
-    .page {
-      width: min(980px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 42px 0 46px;
+    .header,
+    .page,
+    .footer {
+      width: min(1280px, calc(100% - 32px));
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .topline {
+    .header-wrap {
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .header {
+      padding: 22px 0 20px;
+    }
+
+    .eyebrow {
       margin: 0 0 8px;
       color: var(--accent);
       font-size: 13px;
@@ -55,232 +69,1014 @@
 
     h1 {
       margin: 0;
-      font-size: 34px;
+      font-size: 30px;
       line-height: 1.2;
       letter-spacing: 0;
     }
 
-    .lead {
-      max-width: 780px;
-      margin: 12px 0 0;
+    .intro {
+      max-width: 920px;
+      margin: 10px 0 0;
       color: var(--muted);
-      font-size: 16px;
+      font-size: 15px;
     }
 
-    .choice-panel,
-    .quick-panel,
-    .notice {
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .top-links a,
+    .guide-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .top-links a:hover,
+    .top-links a:focus-visible,
+    .guide-actions a:hover,
+    .guide-actions a:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .page {
+      display: grid;
+      gap: 20px;
       margin-top: 22px;
+      margin-bottom: 52px;
+      counter-reset: step;
+    }
+
+    .quickstart-section,
+    .compact-section,
+    .guide-section,
+    .reference-lite {
+      scroll-margin-top: 16px;
       border: 1px solid var(--line);
       border-radius: 8px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
 
-    .panel-head {
-      padding: 18px 22px 14px;
+    .section-head {
+      padding: 18px 22px 15px;
       border-bottom: 1px solid var(--line);
     }
 
-    .panel-head h2 {
+    h2 {
       margin: 0;
-      font-size: 22px;
+      font-size: 21px;
       line-height: 1.3;
       letter-spacing: 0;
     }
 
-    .panel-head p {
-      margin: 7px 0 0;
+    .section-head p {
+      margin: 8px 0 0;
       color: var(--muted);
       font-size: 14px;
     }
 
-    .choice-grid {
+    .flow-list,
+    .mini-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      padding: 18px 22px 20px;
-    }
-
-    .choice-card {
-      display: grid;
-      gap: 7px;
-      min-height: 150px;
-      padding: 17px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfe;
-    }
-
-    .choice-card.primary {
-      border-color: #9fd6d4;
-      background: var(--accent-soft);
-    }
-
-    .choice-card:hover,
-    .choice-card:focus-visible {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
-      outline: none;
-    }
-
-    .choice-card span {
-      color: var(--accent);
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .choice-card strong {
-      font-size: 24px;
-      line-height: 1.22;
-    }
-
-    .choice-card p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .choice-card small {
-      color: #087174;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .quick-list {
-      display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
-      padding: 18px 22px 20px;
+      padding: 18px 22px 14px;
     }
 
-    .quick-step {
-      min-height: 112px;
-      padding: 12px;
+    .flow-list {
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    }
+
+    .mini-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding-bottom: 20px;
+    }
+
+    .flow-card,
+    .mini-link {
       border: 1px solid #b8d9d8;
       border-radius: 8px;
       background: #f2fbfa;
     }
 
-    .quick-step b,
-    .quick-step span,
-    .quick-step small {
-      display: block;
-      line-height: 1.35;
+    .flow-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      min-height: 118px;
+      padding: 12px;
     }
 
-    .quick-step b {
+    .flow-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 31px;
+      height: 24px;
+      border: 1px solid #9fd6d4;
+      border-radius: 6px;
       color: var(--accent);
       font-size: 12px;
-    }
-
-    .quick-step span {
-      margin-top: 5px;
-      font-size: 15px;
       font-weight: 800;
     }
 
-    .quick-step small {
-      margin-top: 5px;
+    .flow-card strong,
+    .flow-card em,
+    .flow-card small,
+    .mini-link strong,
+    .mini-link span {
+      display: block;
+      font-style: normal;
+      line-height: 1.38;
+    }
+
+    .flow-card strong,
+    .mini-link strong {
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .flow-card em,
+    .mini-link span {
+      margin-top: 4px;
       color: var(--muted);
       font-size: 12px;
     }
 
-    .notice {
-      padding: 12px 14px;
-      border-color: var(--warning-line);
-      background: var(--warning-bg);
-      color: #8a5a12;
+    .flow-card small {
+      margin-top: 7px;
+      color: #087174;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-link {
+      padding: 10px 12px;
+    }
+
+    .quickstart-note {
+      margin: 0 22px 20px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent);
+      background: #f5fbfb;
+      color: #344054;
       font-size: 13px;
-      font-weight: 700;
-      box-shadow: none;
+    }
+
+    .guide-steps {
+      display: grid;
+      gap: 18px;
+      padding: 20px 22px 24px;
+    }
+
+    .guide-step {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      counter-increment: step;
+      overflow: hidden;
+    }
+
+    .guide-step.is-active {
+      border-color: #72c7c6;
+      box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      display: block;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: #0b1118;
+      object-fit: contain;
+    }
+
+    .guide-step-body {
+      padding: 14px 16px 16px;
+    }
+
+    .guide-step h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .guide-step h3::before {
+      content: counter(step, decimal-leading-zero);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 23px;
+      padding: 0 6px;
+      border: 1px solid #b8d9d8;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .guide-step-body p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .guide-task,
+    .guide-check {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .guide-task h4,
+    .guide-check h4 {
+      margin: 0 0 6px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .guide-task ol,
+    .guide-check ul {
+      margin: 0;
+      padding-left: 19px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .guide-task li + li,
+    .guide-check li + li {
+      margin-top: 3px;
+    }
+
+    .guide-note {
+      margin: 12px 0 0;
+      padding: 8px 10px;
+      border-left: 3px solid #f2c98b;
+      background: #fffaf1;
+      color: #6f4b15;
+      font-size: 13px;
+    }
+
+    .guide-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .reference-lite {
+      padding: 16px 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .reference-lite a {
+      color: #0f6f8d;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     .footer {
-      margin-top: 22px;
+      margin-bottom: 34px;
       color: var(--muted);
       font-size: 13px;
       text-align: center;
     }
 
-    @media (max-width: 820px) {
-      .page {
-        width: min(100% - 24px, 980px);
-        padding-top: 26px;
+    @media (max-width: 1080px) {
+      .guide-step {
+        grid-template-columns: 1fr;
+      }
+
+      video {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .flow-list,
+      .mini-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header,
+      .page,
+      .footer {
+        width: min(100% - 22px, 1280px);
       }
 
       h1 {
-        font-size: 29px;
+        font-size: 26px;
       }
 
-      .choice-grid,
-      .quick-list {
+      .section-head,
+      .flow-list,
+      .mini-grid,
+      .guide-steps,
+      .reference-lite {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .flow-list,
+      .mini-grid {
         grid-template-columns: 1fr;
-        padding-left: 14px;
-        padding-right: 14px;
       }
 
-      .panel-head {
-        padding-left: 14px;
-        padding-right: 14px;
+      .quickstart-note {
+        margin-left: 14px;
+        margin-right: 14px;
       }
 
-      .choice-card,
-      .quick-step {
-        min-height: 0;
+      .guide-step-body {
+        padding: 12px 13px 14px;
       }
     }
   </style>
 </head>
 <body>
+  <header class="header-wrap">
+    <div class="header">
+      <p class="eyebrow">Tikitaka 配置工具</p>
+      <h1>Tikitaka 简化说明</h1>
+      <p class="intro">覆盖全部 23 个视频演示，只保留照做步骤、检查点和下一步。需要源码依据、风险解释或内部交流口径时，再打开完整内部说明。</p>
+      <nav class="top-links" aria-label="快速导航">
+        <a href="#quickstart">开始配置</a>
+        <a href="#guide">按问题跳转</a>
+        <a href="#basic">基础流程</a>
+        <a href="#advanced">进阶功能</a>
+        <a href="manual.html#guide">完整内部说明</a>
+      </nav>
+    </div>
+  </header>
+
   <main class="page">
-    <p class="topline">Tikitaka 配置工具</p>
-    <h1>先选择打开方式</h1>
-    <p class="lead">这个入口页只做选择：普通用户先按引导跑起来；需要对外解释、内部确认或完整理解时，再进入完整说明。</p>
 
-    <section class="choice-panel" aria-labelledby="choice-title">
-      <div class="panel-head">
-        <h2 id="choice-title">你现在是哪种需求？</h2>
-        <p>不确定就选“直接开始配置”。后面任何时候都可以回到完整说明。</p>
-      </div>
-      <div class="choice-grid">
-        <a class="choice-card primary" href="manual.html#quickstart">
-          <span>使用需求</span>
-          <strong>直接开始配置</strong>
-          <p>只按最少步骤完成设备预设、布局、校准、测试和保存。</p>
-          <small>进入 5 步简化引导</small>
-        </a>
-        <a class="choice-card" href="manual.html#guide">
-          <span>完全理解需求</span>
-          <strong>查看完整说明</strong>
-          <p>按问题和功能查看全部演示，包含高级设置、风险提示和内部说明口径。</p>
-          <small>进入完整说明目录</small>
-        </a>
-      </div>
+      <section class="quickstart-section" id="quickstart">
+        <div class="section-head">
+          <h2>简化引导</h2>
+          <p>第一次使用或只想先跑起来，按这 7 步走。能正常测试就保存，后面有需求再看完整说明。</p>
+        </div>
+        <div class="flow-list">
+          <a class="flow-card" href="#step-010"><span class="flow-index">01</span><span><strong>选设备</strong><em>先套用设备型号，拿到基础配置。</em><small>设备预设</small></span></a><a class="flow-card" href="#step-020"><span class="flow-index">02</span><span><strong>选布局</strong><em>按你的面板确认按键排列。</em><small>布局预设</small></span></a><a class="flow-card" href="#step-030"><span class="flow-index">03</span><span><strong>改功能</strong><em>位置对了但功能不对时调整键位。</em><small>按键功能调整</small></span></a><a class="flow-card" href="#step-080"><span class="flow-index">04</span><span><strong>校准按键</strong><em>让设备知道每个磁轴的起点和终点。</em><small>按键校准</small></span></a><a class="flow-card" href="#step-090"><span class="flow-index">05</span><span><strong>保存校准</strong><em>校准完成后先保存一次。</em><small>保存校准结果</small></span></a><a class="flow-card" href="#step-100"><span class="flow-index">06</span><span><strong>测试输入</strong><em>确认触发、释放和行程正常。</em><small>RT 与行程测试</small></span></a><a class="flow-card" href="#step-110"><span class="flow-index">07</span><span><strong>保存配置</strong><em>测试没问题就写入设备。</em><small>保存配置到设备</small></span></a>
+        </div>
+        <div class="quickstart-note">
+          <strong>简单判断：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置；手感、灯光、专业模式以后再调。
+        </div>
+      </section>
+
+      <section class="compact-section" id="guide">
+        <div class="section-head">
+          <h2>按问题快速跳转</h2>
+          <p>已经知道哪里不对时，直接跳到对应视频。</p>
+        </div>
+        <div class="mini-grid">
+          <a class="mini-link" href="#step-010"><strong>第一次配置</strong><span>设备预设</span></a><a class="mini-link" href="#step-020"><strong>按键位置不对</strong><span>布局预设</span></a><a class="mini-link" href="#step-030"><strong>按键功能不对</strong><span>按键功能调整</span></a><a class="mini-link" href="#step-230"><strong>按了实体键，画面不是这个键</strong><span>按键通道与引脚分配</span></a><a class="mini-link" href="#step-040"><strong>一个键太灵敏或不触发</strong><span>单键行程触发设置</span></a><a class="mini-link" href="#step-050"><strong>多个键一起调手感</strong><span>批量行程触发设置</span></a><a class="mini-link" href="#step-060"><strong>RT 不跟手</strong><span>单键 RT 设置</span></a><a class="mini-link" href="#step-090"><strong>校准后怕丢失</strong><span>保存校准结果</span></a><a class="mini-link" href="#step-100"><strong>最后确认有没有成功</strong><span>RT 与行程测试</span></a><a class="mini-link" href="#step-260"><strong>灯亮到别的按键上</strong><span>按键灯光顺序设置</span></a><a class="mini-link" href="#step-270"><strong>颜色不对</strong><span>按键灯光颜色设置</span></a><a class="mini-link" href="#step-230"><strong>加了新按键但不能用</strong><span>按键通道与引脚分配</span></a>
+        </div>
+      </section>
+
+      <section class="guide-section" id="basic">
+        <div class="section-head">
+          <h2>基础流程</h2>
+          <p>先把设备配置到能正常使用。</p>
+        </div>
+        <div class="guide-steps">
+
+          <article class="guide-step" id="step-010">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E8%AE%BE%E5%A4%87%E9%A2%84%E8%AE%BE/2026-06-11%2014-55-43.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>设备预设</h3>
+              <p>按设备型号套用基础配置，视频演示的是打开设备预设并选择对应型号。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入磁轴配置页面，打开“设备预设”。</li><li>选择与你设备型号一致的预设。</li><li>确认选择后套用预设。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>按键数量和实际面板一致。</li><li>设备预设没有把不需要的 GPIO、LED 或外设配置写入当前设备。</li></ul></div>
+              <p class="guide-note">已有可用配置时先备份；第一次配置可以直接按视频套用。如需验证按钮数量或画布布局，请先切换到专业模式。</p>
+              <div class="guide-actions">
+                <a href="#step-020">下一步：布局预设</a>
+                <a href="manual.html#step-010">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-020">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E5%B8%83%E5%B1%80%E9%A2%84%E8%AE%BE/2026-06-11%2014-56-41.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>布局预设</h3>
+              <p>根据实际面板布局快速生成按键位置，视频演示的是选择布局并套用。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入磁轴配置页面，打开“布局预设”。</li><li>选择与外壳或键位排列一致的布局。</li><li>套用后看画布上的按钮位置是否接近你的设备。</li><li>如果只是键位功能不对，继续看“按键功能调整”。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>方向键、功能键和辅助键位置清楚可辨。</li><li>布局不会覆盖你已经调整好的自定义位置。</li></ul></div>
+              <p class="guide-note">普通用户优先用布局预设；只有按键对应不上时，再看进阶里的通道分配。</p>
+              <div class="guide-actions">
+                <a href="#step-030">下一步：按键功能调整</a>
+                <a href="manual.html#step-020">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-030">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E5%8A%9F%E8%83%BD%E8%B0%83%E6%95%B4/2026-06-11%2014-57-17.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>按键功能调整</h3>
+              <p>点击画布上的按键，修改它在手柄里的功能。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>在磁轴配置画布上选择一个按键。</li><li>在右侧属性面板中选择“功能”。</li><li>按需要改成方向、B1/B2、L1/R1、S1/S2、A1/A2、Fn 等动作。</li><li>改完后继续看测试或保存配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>画布上的标签和你的目标键位一致。</li><li>进入测试模式后按下按键，触发状态和显示的动作一致。</li></ul></div>
+              <p class="guide-note">只改按键功能时，不需要进入专业模式。</p>
+              <div class="guide-actions">
+                <a href="#step-040">下一步：单键行程触发设置</a>
+                <a href="manual.html#step-030">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-040">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E8%A1%8C%E7%A8%8B%E8%A7%A6%E5%8F%91%E8%AE%BE%E7%BD%AE/%E5%8D%95%E7%8B%AC%E8%AE%BE%E7%BD%AE/2026-06-11%2014-58-58.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>单键行程触发设置</h3>
+              <p>只调整一个磁轴按键的总行程和触发行程，视频演示的是点按键后在弹窗里修改数值。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>选择一个 HE 按键。</li><li>切换到“行程”工具。</li><li>在弹出的行程设置窗口里修改 Travel。</li><li>再修改 Actuation。</li><li>改完后关闭窗口，继续看测试或保存配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>轻按到目标深度时按键开始触发。</li><li>完全释放后不会残留触发状态。</li></ul></div>
+              <p class="guide-note">Actuation 数值越小越早触发；如果误触，调大一点再测试。</p>
+              <div class="guide-actions">
+                <a href="#step-050">下一步：批量行程触发设置</a>
+                <a href="manual.html#step-040">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-050">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E8%A1%8C%E7%A8%8B%E8%A7%A6%E5%8F%91%E8%AE%BE%E7%BD%AE/%E6%89%B9%E9%87%8F%E8%AE%BE%E7%BD%AE/2026-06-11%2015-00-00.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>批量行程触发设置</h3>
+              <p>在“更多”菜单里批量填写 Travel 和 Actuation，视频演示的是普通界面也能看到的批量设置。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>打开顶部“更多”菜单。</li><li>保持或切到“普通”界面。</li><li>在批量设置里填写行程和触发行程。</li><li>点击“批量应用行程/触发”。</li><li>继续看 RT 设置、测试或保存配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>同组按键触发手感一致。</li><li>没有把不需要调整的按键一起选中。</li></ul></div>
+              <p class="guide-note">批量应用会把所选按键改成同一组行程参数，适合 WASD、方向键等需要统一手感的按键。</p>
+              <div class="guide-actions">
+                <a href="#step-060">下一步：单键 RT 设置</a>
+                <a href="manual.html#step-050">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-060">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/rt%E5%8A%9F%E8%83%BD%E8%AE%BE%E7%BD%AE/%E5%8D%95%E7%8B%AC%E8%AE%BE%E7%BD%AE/2026-06-11%2015-02-40.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>单键 RT 设置</h3>
+              <p>为单个磁轴按键开启 Rapid Trigger，并设置按下和抬起灵敏度。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>选择一个 HE 按键。</li><li>切换到“RT”工具。</li><li>打开 Enable Rapid Trigger。</li><li>设置 RT Down 和 RT Up。</li><li>进入测试模式，连续轻按和释放，确认不会误触或粘连。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>按下时响应足够快。</li><li>轻微抖动时不会反复误触。</li></ul></div>
+              <p class="guide-note">RT 数值越小越灵敏，也越依赖轴体和传感器稳定性。</p>
+              <div class="guide-actions">
+                <a href="#step-070">下一步：批量 RT 设置</a>
+                <a href="manual.html#step-060">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-070">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/rt%E5%8A%9F%E8%83%BD%E8%AE%BE%E7%BD%AE/%E6%89%B9%E9%87%8F%E8%AE%BE%E7%BD%AE/2026-06-11%2015-03-47.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>批量 RT 设置</h3>
+              <p>对多个磁轴按键统一应用 Rapid Trigger 参数。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>选择需要统一 RT 手感的多个 HE 按键。</li><li>切换到“RT”工具并开启 Rapid Trigger。</li><li>填写 RT Down 和 RT Up。</li><li>批量应用后在测试模式中逐个按键检查。</li><li>确认后保存配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>同组按键的触发和复位速度一致。</li><li>没有把辅助键或不需要 RT 的按键一起应用。</li></ul></div>
+              <p class="guide-note">批量 RT 适合方向键和常用动作键，不建议在未测试前直接套到所有按键。</p>
+              <div class="guide-actions">
+                <a href="#step-080">下一步：按键校准</a>
+                <a href="manual.html#step-070">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-080">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E6%A0%A1%E5%87%86/2026-06-11%2015-07-19.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>按键校准</h3>
+              <p>校准磁轴按键的空闲点和最大按下点，让行程、触发和 RT 判断有可靠基准。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入按键校准或批量校准入口。</li><li>保持所有按键松开，等待空闲采样完成。</li><li>按界面提示逐个按下目标按键到最大行程。</li><li>等待系统记录按下点后松开。</li><li>全部完成后看页面状态，再进入保存校准结果。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>空闲状态下按键不触发。</li><li>完全按下时状态稳定触发。</li></ul></div>
+              <p class="guide-note">校准时不要压着其他按键。</p>
+              <div class="guide-actions">
+                <a href="#step-090">下一步：保存校准结果</a>
+                <a href="manual.html#step-080">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-090">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E6%A0%A1%E5%87%86/%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE/2026-06-11%2015-47-23.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>保存校准结果</h3>
+              <p>校准完成后把新的磁轴参数写入设备，避免刷新或断电后丢失。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>确认所有需要校准的按键已经完成。</li><li>点击保存或保存校准结果。</li><li>等待保存完成提示。</li><li>保存后再做一次 RT 与行程测试。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>页面提示保存成功。</li><li>刷新页面或重新进入后，校准状态仍然正常。</li></ul></div>
+              <p class="guide-note">未保存就离开页面、刷新或重启，校准结果可能不会写入设备。</p>
+              <div class="guide-actions">
+                <a href="#step-100">下一步：RT 与行程测试</a>
+                <a href="manual.html#step-090">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-100">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/rt%E8%A1%8C%E7%A8%8B%E6%A0%A1%E5%87%86%E6%B5%8B%E8%AF%95/2026-06-12%2012-10-22.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>RT 与行程测试</h3>
+              <p>在测试状态下检查按键状态、行程读数和 Rapid Trigger 响应是否正常。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>打开测试模式。</li><li>逐个按下需要检查的按键。</li><li>观察触发状态、行程读数和释放响应。</li><li>发现异常时返回校准、行程或 RT 设置重新调整。</li><li>测试通过后保存最终配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>按下、保持、释放三个阶段都稳定。</li><li>RT 开启的按键能随释放和再按快速响应。</li></ul></div>
+              <p class="guide-note">测试模式读取运行时状态，不等于已经保存；参数确认后仍要执行保存。</p>
+              <div class="guide-actions">
+                <a href="#step-110">下一步：保存配置到设备</a>
+                <a href="manual.html#step-100">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-110">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E4%BF%9D%E5%AD%98%E9%85%8D%E7%BD%AE/2026-06-12%2013-26-20.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>保存配置到设备</h3>
+              <p>把当前页面的设置写入设备存储。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>确认预设、按键、行程、RT、SOCD 或模式设置都已经检查完。</li><li>点击保存配置。</li><li>等待保存完成提示。</li><li>如果页面提示需要重启，再从顶部导航选择重启方式。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>页面出现保存成功或进度完成提示。</li><li>重新进入页面后关键参数仍然保留。</li></ul></div>
+              <p class="guide-note">保存、重启、恢复默认都会改变设备状态，请确认后再执行。</p>
+              <div class="guide-actions">
+                <a href="#step-120">下一步：控制器模式切换</a>
+                <a href="manual.html#step-110">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-120">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/%E6%8E%A7%E5%88%B6%E5%99%A8%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2/2026-06-12%2013-42-11.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>控制器模式切换</h3>
+              <p>切换设备启动后的输入模式，例如 XInput、Switch、DInput、Keyboard、PS4/PS5、Xbox 等。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入设置或磁轴页顶部的输入模式入口。</li><li>选择目标控制器模式。</li><li>如果页面提示需要额外认证或连接手柄，按页面提示处理。</li><li>保存设置。</li><li>必要时重启到 Controller 模式，让系统重新识别设备。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>电脑或主机识别出的设备类型符合目标模式。</li><li>按键测试工具中输入正常。</li></ul></div>
+              <p class="guide-note">切换模式后电脑或主机可能会重新识别设备，短暂断开是正常现象。</p>
+              <div class="guide-actions">
+                <a href="#step-130">下一步：SOCD 模式切换</a>
+                <a href="manual.html#step-120">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-130">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E5%9F%BA%E7%A1%80%E8%AE%BE%E7%BD%AE/SOCD%E6%A8%A1%E5%BC%8F%E5%88%87%E6%8D%A2/2026-06-12%2013-42-33.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>SOCD 模式切换</h3>
+              <p>设置相反方向同时输入时的清理规则。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入磁轴配置页或设置页。</li><li>找到 SOCD 清理模式。</li><li>按需要选择 Up Priority、Neutral、Last Win、First Win 或 Off。</li><li>保存配置并测试左右、上下同时输入。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>同时按下相反方向时输出符合你选择的规则。</li><li>目标游戏或比赛规则允许当前 SOCD 模式。</li></ul></div>
+              <p class="guide-note">Off/Bypass 表示不清理相反方向输入，合规性需要自行确认。</p>
+              <div class="guide-actions">
+                <a href="#step-210">下一步：切换用户模式</a>
+                <a href="manual.html#step-130">看完整说明</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="guide-section" id="advanced">
+        <div class="section-head">
+          <h2>进阶功能</h2>
+          <p>需要时再看，普通用户可以先跳过。</p>
+        </div>
+        <div class="guide-steps">
+
+          <article class="guide-step" id="step-210">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E5%88%87%E6%8D%A2%E7%94%A8%E6%88%B7%E6%A8%A1%E5%BC%8F/2026-06-12%2012-13-55.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>切换用户模式</h3>
+              <p>切换普通/专业界面，显示更多布局、灯光、导入导出和高级维护工具。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>在磁轴配置页面打开“更多”或界面模式入口。</li><li>选择普通模式或 Pro/专业模式。</li><li>进入专业模式后再进行布局解锁、添加按键、灯光工具或自动校准表操作。</li><li>完成后可切回普通模式，减少误操作。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>专业模式下可以看到解锁、添加按键、OLED 布局、LED 工具等入口。</li><li>普通模式下危险或复杂入口被隐藏。</li></ul></div>
+              <p class="guide-note">专业模式会暴露更多会改变布局和硬件映射的功能，建议只在需要时打开。</p>
+              <div class="guide-actions">
+                <a href="#step-220">下一步：导入用户布局</a>
+                <a href="manual.html#step-210">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-220">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E5%AE%9A%E5%88%B6%E7%94%A8%E6%88%B7%E5%B8%83%E5%B1%80%E9%83%A8%E5%88%86%E5%AF%BC%E5%85%A5/2026-06-12%2012-16-32.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>导入用户布局</h3>
+              <p>导入自定义布局中的部分配置，用于复用已整理好的按键位置或配置片段。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入专业模式。</li><li>打开导入入口，选择布局或配置文件。</li><li>只导入需要的部分，避免覆盖无关设置。</li><li>导入后看画布位置和按键功能是否符合预期。</li><li>确认后保存。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>导入后的布局和设备实际面板一致。</li><li>没有把旧设备的通道或 GPIO 配置误带入当前设备。</li></ul></div>
+              <p class="guide-note">跨设备导入前建议先备份当前配置；不确定时只导入布局相关内容。</p>
+              <div class="guide-actions">
+                <a href="#step-230">下一步：按键通道与引脚分配</a>
+                <a href="manual.html#step-220">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-230">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E6%8C%89%E9%94%AE%E9%80%9A%E9%81%93%E5%BC%95%E8%84%9A%E5%88%86%E9%85%8D/2026-06-12%2012-17-26.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>按键通道与引脚分配</h3>
+              <p>为按键分配磁轴通道或 GPIO 引脚，解决硬件线路和画布按钮之间的对应关系。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入专业模式并选择目标按键。</li><li>在属性面板中选择该按键对应的输入来源。</li><li>按视频给按键选择对应通道或引脚。</li><li>分配动作功能。</li><li>保存前到测试演示里按一次实体按键确认对应关系。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>按下实体按键时，画布上对应按钮被触发。</li><li>GPIO 引脚没有覆盖插件或外设正在占用的引脚。</li></ul></div>
+              <p class="guide-note">这是专业设置；普通用户只有在按键对应不上、布局预设无法解决时再使用。</p>
+              <div class="guide-actions">
+                <a href="#step-240">下一步：添加按键</a>
+                <a href="manual.html#step-230">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-240">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%94%AE/2026-06-12%2013-38-33.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>添加按键</h3>
+              <p>在专业布局中新增需要配置的按键元素。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>切换到专业模式并解锁画布。</li><li>选择添加按键工具和按钮尺寸。</li><li>在画布目标位置点击添加。</li><li>为新按键选择输入来源。</li><li>设置动作功能、行程或灯光后保存。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>新增按键位置不遮挡其他元素。</li><li>新增按键已经绑定通道/引脚和功能。</li></ul></div>
+              <p class="guide-note">只添加画布按钮还不能直接使用，需要继续看“按键通道与引脚分配”。</p>
+              <div class="guide-actions">
+                <a href="#step-250">下一步：屏幕定义与布局保存</a>
+                <a href="manual.html#step-240">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-250">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E5%B1%8F%E5%B9%95%E5%AE%9A%E4%B9%89/%E4%BF%AE%E6%94%B9%E9%80%9A%E9%81%93%E6%B7%BB%E5%8A%A0%E6%8C%89%E9%94%AE%E4%BF%9D%E5%AD%98/2026-06-12%2013-11-32.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>屏幕定义与布局保存</h3>
+              <p>修改 OLED/屏幕布局中的按钮元素，绑定通道并保存自定义显示布局。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入 OLED 布局或屏幕定义编辑器。</li><li>解锁布局编辑。</li><li>添加椭圆、方形或按钮元素。</li><li>为元素选择要显示的按键或方向。</li><li>检查位置、大小和显示层级。</li><li>保存自定义布局，并回到显示配置中选择使用。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>屏幕预览中的按钮位置与实际设备相符。</li><li>显示配置里已经选中自定义布局。</li></ul></div>
+              <p class="guide-note">OLED 布局保存后，还需要在显示配置中启用显示并选择对应布局。</p>
+              <div class="guide-actions">
+                <a href="#step-260">下一步：按键灯光顺序设置</a>
+                <a href="manual.html#step-250">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-260">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E7%81%AF%E5%85%89%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E7%81%AF%E5%85%89%E8%AE%BE%E7%BD%AE/%E7%81%AF%E5%85%89%E8%AE%BE%E7%BD%AE%E9%A1%BA%E5%BA%8F%E8%AE%BE%E7%BD%AE/2026-06-12%2012-18-23.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>按键灯光顺序设置</h3>
+              <p>设置 RGB 按键灯在灯带链路中的顺序，影响流水、渐变和按键灯效对应关系。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入 LED 配置或专业模式灯光工具。</li><li>按视频进入按键灯光顺序设置。</li><li>按实际灯带焊接顺序排列按钮 LED。</li><li>保存后观察灯效是否与实体按键顺序一致。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>第一个按钮 LED 从索引 0 开始。</li><li>灯效移动方向和实际灯带顺序一致。</li></ul></div>
+              <p class="guide-note">灯光顺序错了，颜色本身可能正常，但动态效果会错位。</p>
+              <div class="guide-actions">
+                <a href="#step-270">下一步：按键灯光颜色设置</a>
+                <a href="manual.html#step-260">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-270">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E7%81%AF%E5%85%89%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E7%81%AF%E5%85%89%E8%AE%BE%E7%BD%AE/%E6%8C%89%E9%94%AE%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/2026-06-12%2013-25-05.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>按键灯光颜色设置</h3>
+              <p>为单个或多个按键设置普通状态和按下状态颜色。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入专业模式并选择灯光工具，或进入自定义主题页面。</li><li>选择目标按键。</li><li>设置 Normal Color 和 Pressed Color。</li><li>需要统一颜色时可多选按键批量设置。</li><li>保存并用灯光预览或实体灯检查效果。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>松开和按下时颜色符合预期。</li><li>颜色没有因为灯光顺序错误映射到其他按键。</li></ul></div>
+              <p class="guide-note">如果按键颜色显示到别的按键上，先回到“按键灯光顺序设置”。</p>
+              <div class="guide-actions">
+                <a href="#step-280">下一步：氛围灯配置或预设</a>
+                <a href="manual.html#step-270">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-280">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E7%81%AF%E5%85%89%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/%E6%B0%9B%E5%9B%B4%E7%81%AF%E8%AE%BE%E7%BD%AE/%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%88%96%E8%80%85%E4%BD%BF%E7%94%A8%E9%A2%84%E8%AE%BE/2026-06-12%2013-18-22.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>氛围灯配置或预设</h3>
+              <p>为外壳或设备内部的 Case RGB/氛围灯添加配置，或套用已有预设。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入专业模式或 LED 配置的 Case RGB 区域。</li><li>选择 Off、Ambient 或 Linked 等颜色类型。</li><li>按视频添加氛围灯配置或套用预设。</li><li>选择已有预设，或新增自定义配置。</li><li>保存后观察实体氛围灯。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>氛围灯索引位于按钮灯之后，且没有和玩家灯冲突。</li><li>Ambient 模式下氛围灯可以独立于按钮灯工作。</li></ul></div>
+              <p class="guide-note">只想快速使用时优先套用预设；需要细调颜色再看下一步。</p>
+              <div class="guide-actions">
+                <a href="#step-290">下一步：氛围灯颜色设置</a>
+                <a href="manual.html#step-280">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-290">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E7%81%AF%E5%85%89%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/%E6%B0%9B%E5%9B%B4%E7%81%AF%E8%AE%BE%E7%BD%AE/%E9%A2%9C%E8%89%B2%E8%AE%BE%E7%BD%AE/2026-06-12%2013-21-51.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>氛围灯颜色设置</h3>
+              <p>调整氛围灯的默认颜色或预设颜色。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>选择已经添加的氛围灯配置。</li><li>打开颜色选择器。</li><li>设置空闲颜色或预设颜色。</li><li>保存并确认实体灯颜色。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>氛围灯颜色改变的是外壳/背景灯，不是按键灯。</li><li>颜色和亮度不会影响按键识别或供电稳定性。</li></ul></div>
+              <p class="guide-note">如果灯光数量较多，亮度过高可能增加供电压力；异常时先降低最大亮度。</p>
+              <div class="guide-actions">
+                <a href="#step-300">下一步：自动校准</a>
+                <a href="manual.html#step-290">看完整说明</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="guide-step" id="step-300">
+            <video muted loop playsinline preload="metadata">
+              <source src="videos/%E8%BF%9B%E9%98%B6/%E8%87%AA%E5%8A%A8%E6%A0%A1%E5%87%86/2026-06-12%2013-54-55.mp4" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>自动校准</h3>
+              <p>开机或连接后预留约 3 秒初始化时间，自动读取当前磁轴空闲状态并更新校准补偿；用于多平台切换时保证输入稳定，一般保持默认开启。</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                <ol><li>进入磁轴配置页面。</li><li>找到自动校准开关。</li><li>普通使用保持开启。</li><li>开机、重启或连接设备后，等待约 3 秒初始化完成，再开始测试按键。</li><li>这个等待用于应对 PC、主机、Switch、XInput 等多平台切换场景，让设备先稳定磁轴基线和输入识别。</li><li>如果要做特殊调试、固定手感，或确认自动校准影响使用，再考虑关闭。</li><li>保存配置。</li></ol>
+              </div>
+              <div class="guide-check"><h4>完成后确认</h4><ul><li>设备刚连接时如果比普通模式多等待约 3 秒，属于重新获取磁轴状态的正常现象。</li><li>初始化完成后，按键静止时没有误触、断触或异常跳动。</li></ul></div>
+              <p class="guide-note">目的说明：自动校准会让开机/连接初始化增加约 3 秒，用这段时间读取当前磁轴空闲点并更新补偿，主要是为了应对同一设备在 PC、主机、Switch 等平台之间切换后环境和识别状态变化，减少漂移、误触、断触或第一次连接不稳定的问题。</p>
+              <div class="guide-actions">
+                <a href="#quickstart">回到简化流程</a>
+                <a href="manual.html#step-300">看完整说明</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    <section class="reference-lite" id="references">
+      需要源码依据、风险解释或内部交流口径时，查看 <a href="manual.html#references">完整说明的参考资料</a>。
     </section>
-
-    <section class="quick-panel" aria-labelledby="quick-title">
-      <div class="panel-head">
-        <h2 id="quick-title">简化路径预览</h2>
-        <p>只想用起来时，就按这 5 步走；能正常测试后再保存。</p>
-      </div>
-      <div class="quick-list">
-        <div class="quick-step"><b>01</b><span>选设备</span><small>套用设备型号。</small></div>
-        <div class="quick-step"><b>02</b><span>选布局</span><small>确认按键排列。</small></div>
-        <div class="quick-step"><b>03</b><span>校准按键</span><small>记录磁轴范围。</small></div>
-        <div class="quick-step"><b>04</b><span>测试输入</span><small>确认按下和松开。</small></div>
-        <div class="quick-step"><b>05</b><span>保存配置</span><small>写入设备。</small></div>
-      </div>
-    </section>
-
-    <p class="notice">保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
-    <p class="footer">完整说明页包含 23 个视频演示。</p>
   </main>
 
+  <footer class="footer">Tikitaka 简化说明 · 共 23 个视频演示</footer>
+
   <script>
-    if (location.hash) {
-      location.replace("manual.html" + location.hash);
+    const DEMO_PLAYBACK_RATE = 0.5;
+    const demoVideos = Array.from(document.querySelectorAll("video"));
+    let currentActiveVideo = null;
+
+    function enforceDemoPlaybackRate(video) {
+      video.defaultPlaybackRate = DEMO_PLAYBACK_RATE;
+      if (Math.abs(video.playbackRate - DEMO_PLAYBACK_RATE) > 0.01) {
+        video.playbackRate = DEMO_PLAYBACK_RATE;
+      }
     }
+
+    function prepareDemoVideo(video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.autoplay = false;
+      video.loop = true;
+      video.playsInline = true;
+      enforceDemoPlaybackRate(video);
+      video.setAttribute("muted", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("playsinline", "");
+      video.removeAttribute("controls");
+    }
+
+    function setStepActive(video, isActive) {
+      const step = video.closest(".guide-step");
+      if (step) step.classList.toggle("is-active", isActive);
+    }
+
+    function pauseDemoVideo(video) {
+      video.pause();
+      setStepActive(video, false);
+    }
+
+    function playDemoVideo(video, shouldRestart) {
+      if (document.hidden) return;
+      prepareDemoVideo(video);
+
+      if (shouldRestart) {
+        try {
+          video.currentTime = 0;
+        } catch (error) {}
+      }
+
+      setStepActive(video, true);
+      video.play().catch(() => {});
+    }
+
+    demoVideos.forEach((video) => {
+      prepareDemoVideo(video);
+      video.addEventListener("loadedmetadata", () => {
+        enforceDemoPlaybackRate(video);
+      });
+      video.addEventListener("ratechange", () => {
+        enforceDemoPlaybackRate(video);
+      });
+    });
+
+    function getVideoScore(video) {
+      const rect = video.getBoundingClientRect();
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      if (visibleHeight <= 0) return 0;
+
+      const visibleRatio = visibleHeight / Math.max(rect.height, 1);
+      const centerDistance = Math.abs((rect.top + rect.height / 2) - window.innerHeight / 2);
+      const centerBonus = 1 - Math.min(centerDistance / Math.max(window.innerHeight / 2, 1), 1);
+      return visibleRatio + centerBonus * 0.25;
+    }
+
+    function updateActiveVideo() {
+      let nextActiveVideo = null;
+      let bestScore = 0;
+
+      demoVideos.forEach((video) => {
+        const score = getVideoScore(video);
+        if (score > bestScore) {
+          nextActiveVideo = video;
+          bestScore = score;
+        }
+      });
+
+      if (bestScore < 0.42) {
+        demoVideos.forEach(pauseDemoVideo);
+        currentActiveVideo = null;
+        return;
+      }
+
+      if (currentActiveVideo !== nextActiveVideo) {
+        demoVideos.forEach((video) => {
+          if (video !== nextActiveVideo) pauseDemoVideo(video);
+        });
+        currentActiveVideo = nextActiveVideo;
+        playDemoVideo(nextActiveVideo, true);
+        return;
+      }
+
+      demoVideos.forEach((video) => {
+        if (video === currentActiveVideo) {
+          playDemoVideo(video, false);
+        } else {
+          pauseDemoVideo(video);
+        }
+      });
+    }
+
+    let updateQueued = false;
+
+    function queueVideoUpdate() {
+      if (updateQueued) return;
+      updateQueued = true;
+      requestAnimationFrame(() => {
+        updateQueued = false;
+        updateActiveVideo();
+      });
+    }
+
+    window.addEventListener("scroll", queueVideoUpdate, { passive: true });
+    window.addEventListener("resize", queueVideoUpdate);
+    window.addEventListener("load", queueVideoUpdate);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        demoVideos.forEach(pauseDemoVideo);
+      } else {
+        queueVideoUpdate();
+      }
+    });
+    queueVideoUpdate();
   </script>
 </body>
 </html>

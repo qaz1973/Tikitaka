@@ -866,8 +866,10 @@ function renderQuickStart(entries) {
   const flow = [
     ['选设备', '先套用设备型号，拿到基础配置。', '基础设置/设备预设'],
     ['选布局', '按你的面板确认按键排列。', '基础设置/布局预设'],
+    ['改功能', '位置对了但功能不对时调整键位。', '基础设置/按键功能调整'],
     ['校准按键', '让设备知道每个磁轴的起点和终点。', '基础设置/按键校准'],
-    ['测试输入', '按一遍按键，确认触发、释放和行程正常。', '基础设置/rt行程校准测试'],
+    ['保存校准', '校准完成后先保存一次。', '基础设置/按键校准/保存配置'],
+    ['测试输入', '确认触发、释放和行程正常。', '基础设置/rt行程校准测试'],
     ['保存配置', '测试没问题就写入设备。', '基础设置/保存配置'],
   ];
   const cards = flow
@@ -882,13 +884,90 @@ function renderQuickStart(entries) {
       <section class="quickstart-section" id="quickstart">
         <div class="section-head">
           <h2>简化引导</h2>
-          <p>第一次使用或只想先跑起来，按这 5 步走。能正常测试就保存，后面有需求再看完整说明。</p>
+          <p>第一次使用或只想先跑起来，按这 7 步走。能正常测试就保存，后面有需求再看完整说明。</p>
         </div>
         <div class="flow-list">
           ${cards}
         </div>
         <div class="quickstart-note">
           <strong>简单判断：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置；手感、灯光、专业模式以后再调。
+        </div>
+      </section>`;
+}
+
+function renderGuideIssueLinks(entries) {
+  const entryByTopic = new Map(entries.map((entry) => [entry.topic, entry]));
+  const links = issueGuide
+    .map(([label, topic]) => {
+      const target = entryByTopic.get(topic);
+      if (!target) return '';
+      return `<a class="mini-link" href="#${target.id}"><strong>${htmlEscape(label)}</strong><span>${htmlEscape(target.title)}</span></a>`;
+    })
+    .join('');
+
+  return `
+      <section class="compact-section" id="guide">
+        <div class="section-head">
+          <h2>按问题快速跳转</h2>
+          <p>已经知道哪里不对时，直接跳到对应视频。</p>
+        </div>
+        <div class="mini-grid">
+          ${links}
+        </div>
+      </section>`;
+}
+
+function renderGuideStep(entry, nextEntry) {
+  const detail = entry.detail;
+  const steps = detail.steps || [];
+  const checks = (detail.verify || []).slice(0, 2);
+  const note = (detail.notes || [])[0] || '';
+
+  return `
+          <article class="guide-step" id="${entry.id}">
+            <video muted loop playsinline preload="metadata">
+              <source src="${pathToUrl(entry.parts)}" type="video/mp4">
+            </video>
+            <div class="guide-step-body">
+              <h3>${htmlEscape(entry.title)}</h3>
+              <p>${htmlEscape(detail.summary)}</p>
+              <div class="guide-task">
+                <h4>照做</h4>
+                ${renderList(steps, true)}
+              </div>
+              ${checks.length ? `<div class="guide-check"><h4>完成后确认</h4>${renderList(checks)}</div>` : ''}
+              ${note ? `<p class="guide-note">${htmlEscape(note)}</p>` : ''}
+              <div class="guide-actions">
+                ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#quickstart">回到简化流程</a>`}
+                <a href="manual.html#${entry.id}">看完整说明</a>
+              </div>
+            </div>
+          </article>`;
+}
+
+function renderGuideSteps(entries, allEntries) {
+  return entries.map((entry) => {
+    const currentIndex = allEntries.findIndex((candidate) => candidate.id === entry.id);
+    const nextEntry = currentIndex >= 0 ? allEntries[currentIndex + 1] : null;
+    return renderGuideStep(entry, nextEntry);
+  }).join('\n');
+}
+
+function renderGuideSection(section, entries, allEntries) {
+  const id = section === '基础设置' ? 'basic' : 'advanced';
+  const title = section === '进阶' ? '进阶功能' : '基础流程';
+  const description = section === '基础设置'
+    ? '先把设备配置到能正常使用。'
+    : '需要时再看，普通用户可以先跳过。';
+
+  return `
+      <section class="guide-section" id="${id}">
+        <div class="section-head">
+          <h2>${title}</h2>
+          <p>${description}</p>
+        </div>
+        <div class="guide-steps">
+${renderGuideSteps(entries, allEntries)}
         </div>
       </section>`;
 }
@@ -1108,7 +1187,7 @@ function renderLaunchPage(entries) {
 
     .quick-list {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 10px;
       padding: 18px 22px 20px;
     }
@@ -1203,11 +1282,11 @@ function renderLaunchPage(entries) {
         <p>不确定就选“直接开始配置”。后面任何时候都可以回到完整说明。</p>
       </div>
       <div class="choice-grid">
-        <a class="choice-card primary" href="manual.html#quickstart">
+        <a class="choice-card primary" href="guide.html#quickstart">
           <span>使用需求</span>
           <strong>直接开始配置</strong>
           <p>只按最少步骤完成设备预设、布局、校准、测试和保存。</p>
-          <small>进入 5 步简化引导</small>
+          <small>进入简化说明</small>
         </a>
         <a class="choice-card" href="manual.html#guide">
           <span>完全理解需求</span>
@@ -1221,7 +1300,7 @@ function renderLaunchPage(entries) {
     <section class="quick-panel" aria-labelledby="quick-title">
       <div class="panel-head">
         <h2 id="quick-title">简化路径预览</h2>
-        <p>只想用起来时，就按这 5 步走；能正常测试后再保存。</p>
+        <p>只想用起来时，就按这 7 步走；能正常测试后再保存。</p>
       </div>
       <div class="quick-list">
         <div class="quick-step"><b>01</b><span>选设备</span><small>套用设备型号。</small></div>
@@ -1238,8 +1317,600 @@ function renderLaunchPage(entries) {
 
   <script>
     if (location.hash) {
-      location.replace("manual.html" + location.hash);
+      location.replace("guide.html" + location.hash);
     }
+  </script>
+</body>
+</html>
+`;
+}
+
+function renderGuidePage(entries) {
+  const basic = entries.filter((entry) => entry.section === '基础设置');
+  const advanced = entries.filter((entry) => entry.section === '进阶');
+
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tikitaka 简化说明</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f6f8;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #d8dee7;
+      --accent: #0f8b8d;
+      --accent-soft: #e2f5f4;
+      --accent-2: #d97904;
+      --warning-bg: #fff7e8;
+      --warning-line: #f2c98b;
+      --shadow: 0 8px 24px rgba(31, 41, 51, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.58;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .header,
+    .page,
+    .footer {
+      width: min(1280px, calc(100% - 32px));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .header-wrap {
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .header {
+      padding: 22px 0 20px;
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .intro {
+      max-width: 920px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .top-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .top-links a,
+    .guide-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 5px 11px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .top-links a:hover,
+    .top-links a:focus-visible,
+    .guide-actions a:hover,
+    .guide-actions a:focus-visible {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      outline: none;
+    }
+
+    .page {
+      display: grid;
+      gap: 20px;
+      margin-top: 22px;
+      margin-bottom: 52px;
+      counter-reset: step;
+    }
+
+    .quickstart-section,
+    .compact-section,
+    .guide-section,
+    .reference-lite {
+      scroll-margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      padding: 18px 22px 15px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .flow-list,
+    .mini-grid {
+      display: grid;
+      gap: 10px;
+      padding: 18px 22px 14px;
+    }
+
+    .flow-list {
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    }
+
+    .mini-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      padding-bottom: 20px;
+    }
+
+    .flow-card,
+    .mini-link {
+      border: 1px solid #b8d9d8;
+      border-radius: 8px;
+      background: #f2fbfa;
+    }
+
+    .flow-card {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 10px;
+      min-height: 118px;
+      padding: 12px;
+    }
+
+    .flow-index {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 31px;
+      height: 24px;
+      border: 1px solid #9fd6d4;
+      border-radius: 6px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .flow-card strong,
+    .flow-card em,
+    .flow-card small,
+    .mini-link strong,
+    .mini-link span {
+      display: block;
+      font-style: normal;
+      line-height: 1.38;
+    }
+
+    .flow-card strong,
+    .mini-link strong {
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .flow-card em,
+    .mini-link span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .flow-card small {
+      margin-top: 7px;
+      color: #087174;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-link {
+      padding: 10px 12px;
+    }
+
+    .quickstart-note {
+      margin: 0 22px 20px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent);
+      background: #f5fbfb;
+      color: #344054;
+      font-size: 13px;
+    }
+
+    .guide-steps {
+      display: grid;
+      gap: 18px;
+      padding: 20px 22px 24px;
+    }
+
+    .guide-step {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.92fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: stretch;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+      counter-increment: step;
+      overflow: hidden;
+    }
+
+    .guide-step.is-active {
+      border-color: #72c7c6;
+      box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      min-height: 260px;
+      display: block;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: #0b1118;
+      object-fit: contain;
+    }
+
+    .guide-step-body {
+      padding: 14px 16px 16px;
+    }
+
+    .guide-step h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 8px;
+      font-size: 17px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .guide-step h3::before {
+      content: counter(step, decimal-leading-zero);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 32px;
+      height: 23px;
+      padding: 0 6px;
+      border: 1px solid #b8d9d8;
+      border-radius: 6px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .guide-step-body p {
+      margin: 0;
+      color: var(--ink);
+      font-size: 14px;
+    }
+
+    .guide-task,
+    .guide-check {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+    }
+
+    .guide-task h4,
+    .guide-check h4 {
+      margin: 0 0 6px;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .guide-task ol,
+    .guide-check ul {
+      margin: 0;
+      padding-left: 19px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .guide-task li + li,
+    .guide-check li + li {
+      margin-top: 3px;
+    }
+
+    .guide-note {
+      margin: 12px 0 0;
+      padding: 8px 10px;
+      border-left: 3px solid #f2c98b;
+      background: #fffaf1;
+      color: #6f4b15;
+      font-size: 13px;
+    }
+
+    .guide-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .reference-lite {
+      padding: 16px 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .reference-lite a {
+      color: #0f6f8d;
+      font-weight: 800;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .footer {
+      margin-bottom: 34px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 1080px) {
+      .guide-step {
+        grid-template-columns: 1fr;
+      }
+
+      video {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .flow-list,
+      .mini-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .header,
+      .page,
+      .footer {
+        width: min(100% - 22px, 1280px);
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .section-head,
+      .flow-list,
+      .mini-grid,
+      .guide-steps,
+      .reference-lite {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .flow-list,
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quickstart-note {
+        margin-left: 14px;
+        margin-right: 14px;
+      }
+
+      .guide-step-body {
+        padding: 12px 13px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header-wrap">
+    <div class="header">
+      <p class="eyebrow">Tikitaka 配置工具</p>
+      <h1>Tikitaka 简化说明</h1>
+      <p class="intro">覆盖全部 ${entries.length} 个视频演示，只保留照做步骤、检查点和下一步。需要源码依据、风险解释或内部交流口径时，再打开完整内部说明。</p>
+      <nav class="top-links" aria-label="快速导航">
+        <a href="#quickstart">开始配置</a>
+        <a href="#guide">按问题跳转</a>
+        <a href="#basic">基础流程</a>
+        <a href="#advanced">进阶功能</a>
+        <a href="manual.html#guide">完整内部说明</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+${renderQuickStart(entries)}
+${renderGuideIssueLinks(entries)}
+${renderGuideSection('基础设置', basic, entries)}
+${renderGuideSection('进阶', advanced, entries)}
+    <section class="reference-lite" id="references">
+      需要源码依据、风险解释或内部交流口径时，查看 <a href="manual.html#references">完整说明的参考资料</a>。
+    </section>
+  </main>
+
+  <footer class="footer">Tikitaka 简化说明 · 共 ${entries.length} 个视频演示</footer>
+
+  <script>
+    const DEMO_PLAYBACK_RATE = 0.5;
+    const demoVideos = Array.from(document.querySelectorAll("video"));
+    let currentActiveVideo = null;
+
+    function enforceDemoPlaybackRate(video) {
+      video.defaultPlaybackRate = DEMO_PLAYBACK_RATE;
+      if (Math.abs(video.playbackRate - DEMO_PLAYBACK_RATE) > 0.01) {
+        video.playbackRate = DEMO_PLAYBACK_RATE;
+      }
+    }
+
+    function prepareDemoVideo(video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.autoplay = false;
+      video.loop = true;
+      video.playsInline = true;
+      enforceDemoPlaybackRate(video);
+      video.setAttribute("muted", "");
+      video.setAttribute("loop", "");
+      video.setAttribute("playsinline", "");
+      video.removeAttribute("controls");
+    }
+
+    function setStepActive(video, isActive) {
+      const step = video.closest(".guide-step");
+      if (step) step.classList.toggle("is-active", isActive);
+    }
+
+    function pauseDemoVideo(video) {
+      video.pause();
+      setStepActive(video, false);
+    }
+
+    function playDemoVideo(video, shouldRestart) {
+      if (document.hidden) return;
+      prepareDemoVideo(video);
+
+      if (shouldRestart) {
+        try {
+          video.currentTime = 0;
+        } catch (error) {}
+      }
+
+      setStepActive(video, true);
+      video.play().catch(() => {});
+    }
+
+    demoVideos.forEach((video) => {
+      prepareDemoVideo(video);
+      video.addEventListener("loadedmetadata", () => {
+        enforceDemoPlaybackRate(video);
+      });
+      video.addEventListener("ratechange", () => {
+        enforceDemoPlaybackRate(video);
+      });
+    });
+
+    function getVideoScore(video) {
+      const rect = video.getBoundingClientRect();
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      if (visibleHeight <= 0) return 0;
+
+      const visibleRatio = visibleHeight / Math.max(rect.height, 1);
+      const centerDistance = Math.abs((rect.top + rect.height / 2) - window.innerHeight / 2);
+      const centerBonus = 1 - Math.min(centerDistance / Math.max(window.innerHeight / 2, 1), 1);
+      return visibleRatio + centerBonus * 0.25;
+    }
+
+    function updateActiveVideo() {
+      let nextActiveVideo = null;
+      let bestScore = 0;
+
+      demoVideos.forEach((video) => {
+        const score = getVideoScore(video);
+        if (score > bestScore) {
+          nextActiveVideo = video;
+          bestScore = score;
+        }
+      });
+
+      if (bestScore < 0.42) {
+        demoVideos.forEach(pauseDemoVideo);
+        currentActiveVideo = null;
+        return;
+      }
+
+      if (currentActiveVideo !== nextActiveVideo) {
+        demoVideos.forEach((video) => {
+          if (video !== nextActiveVideo) pauseDemoVideo(video);
+        });
+        currentActiveVideo = nextActiveVideo;
+        playDemoVideo(nextActiveVideo, true);
+        return;
+      }
+
+      demoVideos.forEach((video) => {
+        if (video === currentActiveVideo) {
+          playDemoVideo(video, false);
+        } else {
+          pauseDemoVideo(video);
+        }
+      });
+    }
+
+    let updateQueued = false;
+
+    function queueVideoUpdate() {
+      if (updateQueued) return;
+      updateQueued = true;
+      requestAnimationFrame(() => {
+        updateQueued = false;
+        updateActiveVideo();
+      });
+    }
+
+    window.addEventListener("scroll", queueVideoUpdate, { passive: true });
+    window.addEventListener("resize", queueVideoUpdate);
+    window.addEventListener("load", queueVideoUpdate);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        demoVideos.forEach(pauseDemoVideo);
+      } else {
+        queueVideoUpdate();
+      }
+    });
+    queueVideoUpdate();
   </script>
 </body>
 </html>
@@ -1513,7 +2184,7 @@ function renderManualPage(entries) {
 
     .flow-list {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 10px;
       padding: 18px 22px 14px;
     }
@@ -1904,7 +2575,7 @@ function renderManualPage(entries) {
       <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
-        <a href="index.html">返回启动页</a>
+        <a href="index.html">返回简化版</a>
         <a href="#quickstart">简化引导</a>
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
@@ -1917,7 +2588,7 @@ function renderManualPage(entries) {
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
-      <a href="index.html">返回启动页</a>
+      <a href="index.html">返回简化版</a>
       <a href="#quickstart">简化引导</a>
       <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
@@ -2097,7 +2768,7 @@ function renderReadme(entries) {
 
 这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
 
-首页 \`index.html\` 是单独启动页，只做“直接开始配置 / 查看完整说明”的分流。完整说明页在 \`manual.html\`，普通用户可先进入 5 步简化引导，内部交流或完整理解再看全部说明。
+首页 \`index.html\` 是简化版说明，覆盖全部视频但只保留照做步骤、检查点和下一步。完整内部说明页在 \`manual.html\`，保留更多解释、风险提示、相关跳转和资料依据。
 
 ## 在线说明网站
 
@@ -2105,7 +2776,7 @@ function renderReadme(entries) {
 https://qaz1973.github.io/Tikitaka/
 \`\`\`
 
-完整说明页：
+完整内部说明页：
 
 \`\`\`text
 https://qaz1973.github.io/Tikitaka/manual.html
@@ -2200,7 +2871,7 @@ function makeEntries() {
 const entries = makeEntries();
 copyVideos(entries);
 
-fs.writeFileSync(path.join(repoRoot, 'index.html'), renderLaunchPage(entries), 'utf8');
+fs.writeFileSync(path.join(repoRoot, 'index.html'), renderGuidePage(entries), 'utf8');
 fs.writeFileSync(path.join(repoRoot, 'manual.html'), renderManualPage(entries), 'utf8');
 fs.writeFileSync(path.join(repoRoot, 'README.md'), renderReadme(entries), 'utf8');
 

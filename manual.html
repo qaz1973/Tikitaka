@@ -261,7 +261,7 @@
 
     .flow-list {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 10px;
       padding: 18px 22px 14px;
     }
@@ -652,7 +652,7 @@
       <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
-        <a href="index.html">返回启动页</a>
+        <a href="index.html">返回简化版</a>
         <a href="#quickstart">简化引导</a>
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
@@ -665,7 +665,7 @@
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
-      <a href="index.html">返回启动页</a>
+      <a href="index.html">返回简化版</a>
       <a href="#quickstart">简化引导</a>
       <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
@@ -701,10 +701,10 @@
       <section class="quickstart-section" id="quickstart">
         <div class="section-head">
           <h2>简化引导</h2>
-          <p>第一次使用或只想先跑起来，按这 5 步走。能正常测试就保存，后面有需求再看完整说明。</p>
+          <p>第一次使用或只想先跑起来，按这 7 步走。能正常测试就保存，后面有需求再看完整说明。</p>
         </div>
         <div class="flow-list">
-          <a class="flow-card" href="#step-010"><span class="flow-index">01</span><span><strong>选设备</strong><em>先套用设备型号，拿到基础配置。</em><small>设备预设</small></span></a><a class="flow-card" href="#step-020"><span class="flow-index">02</span><span><strong>选布局</strong><em>按你的面板确认按键排列。</em><small>布局预设</small></span></a><a class="flow-card" href="#step-080"><span class="flow-index">03</span><span><strong>校准按键</strong><em>让设备知道每个磁轴的起点和终点。</em><small>按键校准</small></span></a><a class="flow-card" href="#step-100"><span class="flow-index">04</span><span><strong>测试输入</strong><em>按一遍按键，确认触发、释放和行程正常。</em><small>RT 与行程测试</small></span></a><a class="flow-card" href="#step-110"><span class="flow-index">05</span><span><strong>保存配置</strong><em>测试没问题就写入设备。</em><small>保存配置到设备</small></span></a>
+          <a class="flow-card" href="#step-010"><span class="flow-index">01</span><span><strong>选设备</strong><em>先套用设备型号，拿到基础配置。</em><small>设备预设</small></span></a><a class="flow-card" href="#step-020"><span class="flow-index">02</span><span><strong>选布局</strong><em>按你的面板确认按键排列。</em><small>布局预设</small></span></a><a class="flow-card" href="#step-030"><span class="flow-index">03</span><span><strong>改功能</strong><em>位置对了但功能不对时调整键位。</em><small>按键功能调整</small></span></a><a class="flow-card" href="#step-080"><span class="flow-index">04</span><span><strong>校准按键</strong><em>让设备知道每个磁轴的起点和终点。</em><small>按键校准</small></span></a><a class="flow-card" href="#step-090"><span class="flow-index">05</span><span><strong>保存校准</strong><em>校准完成后先保存一次。</em><small>保存校准结果</small></span></a><a class="flow-card" href="#step-100"><span class="flow-index">06</span><span><strong>测试输入</strong><em>确认触发、释放和行程正常。</em><small>RT 与行程测试</small></span></a><a class="flow-card" href="#step-110"><span class="flow-index">07</span><span><strong>保存配置</strong><em>测试没问题就写入设备。</em><small>保存配置到设备</small></span></a>
         </div>
         <div class="quickstart-note">
           <strong>简单判断：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置；手感、灯光、专业模式以后再调。
