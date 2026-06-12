@@ -956,7 +956,297 @@ function renderReferenceList(items, link = false) {
   }).join('');
 }
 
-function renderIndex(entries) {
+function renderLaunchPage(entries) {
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tikitaka 说明入口</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f3f6f8;
+      --panel: #ffffff;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #d8dee7;
+      --accent: #0f8b8d;
+      --accent-soft: #e2f5f4;
+      --accent-2: #d97904;
+      --warning-bg: #fff7e8;
+      --warning-line: #f2c98b;
+      --shadow: 0 8px 24px rgba(31, 41, 51, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.58;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(980px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 46px;
+    }
+
+    .topline {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 780px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .choice-panel,
+    .quick-panel,
+    .notice {
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .panel-head p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      padding: 18px 22px 20px;
+    }
+
+    .choice-card {
+      display: grid;
+      gap: 7px;
+      min-height: 150px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfe;
+    }
+
+    .choice-card.primary {
+      border-color: #9fd6d4;
+      background: var(--accent-soft);
+    }
+
+    .choice-card:hover,
+    .choice-card:focus-visible {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
+      outline: none;
+    }
+
+    .choice-card span {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .choice-card strong {
+      font-size: 24px;
+      line-height: 1.22;
+    }
+
+    .choice-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .choice-card small {
+      color: #087174;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .quick-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      padding: 18px 22px 20px;
+    }
+
+    .quick-step {
+      min-height: 112px;
+      padding: 12px;
+      border: 1px solid #b8d9d8;
+      border-radius: 8px;
+      background: #f2fbfa;
+    }
+
+    .quick-step b,
+    .quick-step span,
+    .quick-step small {
+      display: block;
+      line-height: 1.35;
+    }
+
+    .quick-step b {
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    .quick-step span {
+      margin-top: 5px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .quick-step small {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .notice {
+      padding: 12px 14px;
+      border-color: var(--warning-line);
+      background: var(--warning-bg);
+      color: #8a5a12;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: none;
+    }
+
+    .footer {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .page {
+        width: min(100% - 24px, 980px);
+        padding-top: 26px;
+      }
+
+      h1 {
+        font-size: 29px;
+      }
+
+      .choice-grid,
+      .quick-list {
+        grid-template-columns: 1fr;
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .panel-head {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .choice-card,
+      .quick-step {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <p class="topline">Tikitaka 配置工具</p>
+    <h1>先选择打开方式</h1>
+    <p class="lead">这个入口页只做选择：普通用户先按引导跑起来；需要对外解释、内部确认或完整理解时，再进入完整说明。</p>
+
+    <section class="choice-panel" aria-labelledby="choice-title">
+      <div class="panel-head">
+        <h2 id="choice-title">你现在是哪种需求？</h2>
+        <p>不确定就选“直接开始配置”。后面任何时候都可以回到完整说明。</p>
+      </div>
+      <div class="choice-grid">
+        <a class="choice-card primary" href="manual.html#quickstart">
+          <span>使用需求</span>
+          <strong>直接开始配置</strong>
+          <p>只按最少步骤完成设备预设、布局、校准、测试和保存。</p>
+          <small>进入 5 步简化引导</small>
+        </a>
+        <a class="choice-card" href="manual.html#guide">
+          <span>完全理解需求</span>
+          <strong>查看完整说明</strong>
+          <p>按问题和功能查看全部演示，包含高级设置、风险提示和内部说明口径。</p>
+          <small>进入完整说明目录</small>
+        </a>
+      </div>
+    </section>
+
+    <section class="quick-panel" aria-labelledby="quick-title">
+      <div class="panel-head">
+        <h2 id="quick-title">简化路径预览</h2>
+        <p>只想用起来时，就按这 5 步走；能正常测试后再保存。</p>
+      </div>
+      <div class="quick-list">
+        <div class="quick-step"><b>01</b><span>选设备</span><small>套用设备型号。</small></div>
+        <div class="quick-step"><b>02</b><span>选布局</span><small>确认按键排列。</small></div>
+        <div class="quick-step"><b>03</b><span>校准按键</span><small>记录磁轴范围。</small></div>
+        <div class="quick-step"><b>04</b><span>测试输入</span><small>确认按下和松开。</small></div>
+        <div class="quick-step"><b>05</b><span>保存配置</span><small>写入设备。</small></div>
+      </div>
+    </section>
+
+    <p class="notice">保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
+    <p class="footer">完整说明页包含 ${entries.length} 个视频演示。</p>
+  </main>
+
+  <script>
+    if (location.hash) {
+      location.replace("manual.html" + location.hash);
+    }
+  </script>
+</body>
+</html>
+`;
+}
+
+function renderManualPage(entries) {
   const basic = entries.filter((entry) => entry.section === '基础设置');
   const advanced = entries.filter((entry) => entry.section === '进阶');
 
@@ -1614,7 +1904,7 @@ function renderIndex(entries) {
       <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
-        <a href="#start">选择模式</a>
+        <a href="index.html">返回启动页</a>
         <a href="#quickstart">简化引导</a>
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
@@ -1627,7 +1917,7 @@ function renderIndex(entries) {
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
-      <a href="#start">选择模式</a>
+      <a href="index.html">返回启动页</a>
       <a href="#quickstart">简化引导</a>
       <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
@@ -1638,7 +1928,6 @@ ${advanced.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEsca
     </aside>
 
     <div class="content">
-${renderStartChoice()}
 ${renderQuickStart(entries)}
 ${renderIssueGuide(entries)}
 ${renderSection('基础设置', basic, entries)}
@@ -1806,12 +2095,20 @@ function renderReadme(entries) {
 
   return `# Tikitaka 使用说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。首页提供“简化引导”和“完整说明”两个入口：普通用户可按 5 步先用起来，内部交流或完整理解再看全部说明。
+这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
+
+首页 \`index.html\` 是单独启动页，只做“直接开始配置 / 查看完整说明”的分流。完整说明页在 \`manual.html\`，普通用户可先进入 5 步简化引导，内部交流或完整理解再看全部说明。
 
 ## 在线说明网站
 
 \`\`\`text
 https://qaz1973.github.io/Tikitaka/
+\`\`\`
+
+完整说明页：
+
+\`\`\`text
+https://qaz1973.github.io/Tikitaka/manual.html
 \`\`\`
 
 ## 同步录屏
@@ -1827,6 +2124,8 @@ D:\\2\\说明书视频文件部分
 \`\`\`powershell
 node tools/sync-manual.js
 \`\`\`
+
+同步后会更新 \`index.html\`、\`manual.html\`、\`README.md\`，并同步 \`videos/\`。
 
 也可以指定其他来源目录：
 
@@ -1901,7 +2200,8 @@ function makeEntries() {
 const entries = makeEntries();
 copyVideos(entries);
 
-fs.writeFileSync(path.join(repoRoot, 'index.html'), renderIndex(entries), 'utf8');
+fs.writeFileSync(path.join(repoRoot, 'index.html'), renderLaunchPage(entries), 'utf8');
+fs.writeFileSync(path.join(repoRoot, 'manual.html'), renderManualPage(entries), 'utf8');
 fs.writeFileSync(path.join(repoRoot, 'README.md'), renderReadme(entries), 'utf8');
 
 console.log(`Synced ${entries.length} video steps from ${sourceRoot}`);

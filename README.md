@@ -1,11 +1,19 @@
 # Tikitaka 使用说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 `tools/sync-manual.js` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。首页提供“简化引导”和“完整说明”两个入口：普通用户可按 5 步先用起来，内部交流或完整理解再看全部说明。
+这是 Tikitaka 配置工具的中文说明网站。页面由 `tools/sync-manual.js` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
+
+首页 `index.html` 是单独启动页，只做“直接开始配置 / 查看完整说明”的分流。完整说明页在 `manual.html`，普通用户可先进入 5 步简化引导，内部交流或完整理解再看全部说明。
 
 ## 在线说明网站
 
 ```text
 https://qaz1973.github.io/Tikitaka/
+```
+
+完整说明页：
+
+```text
+https://qaz1973.github.io/Tikitaka/manual.html
 ```
 
 ## 同步录屏
@@ -21,6 +29,8 @@ D:\2\说明书视频文件部分
 ```powershell
 node tools/sync-manual.js
 ```
+
+同步后会更新 `index.html`、`manual.html`、`README.md`，并同步 `videos/`。
 
 也可以指定其他来源目录：
 
