@@ -883,14 +883,14 @@ function renderQuickStart(entries) {
   return `
       <section class="quickstart-section" id="quickstart">
         <div class="section-head">
-          <h2>简化引导</h2>
-          <p>第一次使用或只想先跑起来，按这 7 步走。能正常测试就保存，后面有需求再看完整说明。</p>
+          <h2>先按这 7 步配置</h2>
+          <p>第一次使用照顺序走，能正常测试就保存。</p>
         </div>
         <div class="flow-list">
           ${cards}
         </div>
         <div class="quickstart-note">
-          <strong>简单判断：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置；手感、灯光、专业模式以后再调。
+          <strong>先判断能不能用：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置。
         </div>
       </section>`;
 }
@@ -908,8 +908,8 @@ function renderGuideIssueLinks(entries) {
   return `
       <section class="compact-section" id="guide">
         <div class="section-head">
-          <h2>按问题快速跳转</h2>
-          <p>已经知道哪里不对时，直接跳到对应视频。</p>
+          <h2>遇到问题直接点</h2>
+          <p>不用从头找，点问题就跳到对应演示。</p>
         </div>
         <div class="mini-grid">
           ${links}
@@ -920,8 +920,16 @@ function renderGuideIssueLinks(entries) {
 function renderGuideStep(entry, nextEntry) {
   const detail = entry.detail;
   const steps = detail.steps || [];
+  const visibleSteps = steps.slice(0, 4);
+  const extraSteps = steps.slice(4);
   const checks = (detail.verify || []).slice(0, 2);
   const note = (detail.notes || [])[0] || '';
+  const hasMore = extraSteps.length || checks.length || note;
+  const moreBlocks = [
+    extraSteps.length ? `<div class="guide-check"><h4>剩余动作</h4>${renderList(extraSteps, true)}</div>` : '',
+    checks.length ? `<div class="guide-check"><h4>完成后确认</h4>${renderList(checks)}</div>` : '',
+    note ? `<p class="guide-note">${htmlEscape(note)}</p>` : '',
+  ].filter(Boolean).join('\n                ');
 
   return `
           <article class="guide-step" id="${entry.id}">
@@ -930,16 +938,18 @@ function renderGuideStep(entry, nextEntry) {
             </video>
             <div class="guide-step-body">
               <h3>${htmlEscape(entry.title)}</h3>
-              <p>${htmlEscape(detail.summary)}</p>
+              <p class="guide-brief">${htmlEscape(detail.summary)}</p>
               <div class="guide-task">
                 <h4>照做</h4>
-                ${renderList(steps, true)}
+                ${renderList(visibleSteps, true)}
               </div>
-              ${checks.length ? `<div class="guide-check"><h4>完成后确认</h4>${renderList(checks)}</div>` : ''}
-              ${note ? `<p class="guide-note">${htmlEscape(note)}</p>` : ''}
+              ${hasMore ? `<details class="guide-more">
+                <summary>检查点和注意事项</summary>
+                ${moreBlocks}
+              </details>` : ''}
               <div class="guide-actions">
-                ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#quickstart">回到简化流程</a>`}
-                <a href="manual.html#${entry.id}">看完整说明</a>
+                ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#quickstart">回到主流程</a>`}
+                <a href="manual.html#${entry.id}">完整说明</a>
               </div>
             </div>
           </article>`;
@@ -959,9 +969,10 @@ function renderGuideSection(section, entries, allEntries) {
   const description = section === '基础设置'
     ? '先把设备配置到能正常使用。'
     : '需要时再看，普通用户可以先跳过。';
+  const className = section === '进阶' ? 'guide-section is-advanced' : 'guide-section';
 
   return `
-      <section class="guide-section" id="${id}">
+      <section class="${className}" id="${id}">
         <div class="section-head">
           <h2>${title}</h2>
           <p>${description}</p>
@@ -1282,11 +1293,11 @@ function renderLaunchPage(entries) {
         <p>不确定就选“直接开始配置”。后面任何时候都可以回到完整说明。</p>
       </div>
       <div class="choice-grid">
-        <a class="choice-card primary" href="guide.html#quickstart">
+        <a class="choice-card primary" href="index.html#quickstart">
           <span>使用需求</span>
           <strong>直接开始配置</strong>
           <p>只按最少步骤完成设备预设、布局、校准、测试和保存。</p>
-          <small>进入简化说明</small>
+          <small>进入使用说明</small>
         </a>
         <a class="choice-card" href="manual.html#guide">
           <span>完全理解需求</span>
@@ -1299,7 +1310,7 @@ function renderLaunchPage(entries) {
 
     <section class="quick-panel" aria-labelledby="quick-title">
       <div class="panel-head">
-        <h2 id="quick-title">简化路径预览</h2>
+        <h2 id="quick-title">主流程预览</h2>
         <p>只想用起来时，就按这 7 步走；能正常测试后再保存。</p>
       </div>
       <div class="quick-list">
@@ -1317,7 +1328,7 @@ function renderLaunchPage(entries) {
 
   <script>
     if (location.hash) {
-      location.replace("guide.html" + location.hash);
+      location.replace("index.html" + location.hash);
     }
   </script>
 </body>
@@ -1334,7 +1345,13 @@ function renderGuidePage(entries) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tikitaka 简化说明</title>
+  <script>
+    window.__pendingInitialHash = location.hash;
+    if (window.__pendingInitialHash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  </script>
+  <title>Tikitaka 使用说明</title>
   <style>
     :root {
       color-scheme: light;
@@ -1356,7 +1373,7 @@ function renderGuidePage(entries) {
     }
 
     html {
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
     }
 
     body {
@@ -1367,6 +1384,7 @@ function renderGuidePage(entries) {
       font-size: 15px;
       line-height: 1.58;
       letter-spacing: 0;
+      overflow-x: hidden;
     }
 
     a {
@@ -1410,6 +1428,7 @@ function renderGuidePage(entries) {
       margin: 10px 0 0;
       color: var(--muted);
       font-size: 15px;
+      overflow-wrap: anywhere;
     }
 
     .top-links {
@@ -1477,6 +1496,7 @@ function renderGuidePage(entries) {
       margin: 8px 0 0;
       color: var(--muted);
       font-size: 14px;
+      overflow-wrap: anywhere;
     }
 
     .flow-list,
@@ -1636,6 +1656,10 @@ function renderGuidePage(entries) {
       font-size: 14px;
     }
 
+    .guide-brief {
+      color: #475467;
+    }
+
     .guide-task,
     .guide-check {
       margin-top: 12px;
@@ -1671,6 +1695,30 @@ function renderGuidePage(entries) {
       background: #fffaf1;
       color: #6f4b15;
       font-size: 13px;
+    }
+
+    .guide-more {
+      margin-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .guide-more summary {
+      min-height: 34px;
+      padding-top: 10px;
+      color: #0f6f8d;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      list-style-position: inside;
+    }
+
+    .guide-more[open] summary {
+      margin-bottom: 2px;
+    }
+
+    .guide-more .guide-check {
+      margin-top: 8px;
     }
 
     .guide-actions {
@@ -1723,11 +1771,23 @@ function renderGuidePage(entries) {
       .header,
       .page,
       .footer {
-        width: min(100% - 22px, 1280px);
+        width: calc(100% - 22px);
+        max-width: 1280px;
       }
 
       h1 {
         font-size: 26px;
+      }
+
+      .top-links {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .top-links a {
+        justify-content: center;
+        min-width: 0;
+        text-align: center;
       }
 
       .section-head,
@@ -1759,8 +1819,8 @@ function renderGuidePage(entries) {
   <header class="header-wrap">
     <div class="header">
       <p class="eyebrow">Tikitaka 配置工具</p>
-      <h1>Tikitaka 简化说明</h1>
-      <p class="intro">覆盖全部 ${entries.length} 个视频演示，只保留照做步骤、检查点和下一步。需要源码依据、风险解释或内部交流口径时，再打开完整内部说明。</p>
+      <h1>Tikitaka 使用说明</h1>
+      <p class="intro">按顺序配置，能测试就保存。遇到问题从下面入口找。</p>
       <nav class="top-links" aria-label="快速导航">
         <a href="#quickstart">开始配置</a>
         <a href="#guide">按问题跳转</a>
@@ -1777,11 +1837,11 @@ ${renderGuideIssueLinks(entries)}
 ${renderGuideSection('基础设置', basic, entries)}
 ${renderGuideSection('进阶', advanced, entries)}
     <section class="reference-lite" id="references">
-      需要源码依据、风险解释或内部交流口径时，查看 <a href="manual.html#references">完整说明的参考资料</a>。
+      需要源码依据、风险解释或内部交流口径时，查看 <a href="manual.html#references">完整内部说明</a>。
     </section>
   </main>
 
-  <footer class="footer">Tikitaka 简化说明 · 共 ${entries.length} 个视频演示</footer>
+  <footer class="footer">Tikitaka 使用说明 · 共 ${entries.length} 个视频演示</footer>
 
   <script>
     const DEMO_PLAYBACK_RATE = 0.5;
@@ -1891,6 +1951,18 @@ ${renderGuideSection('进阶', advanced, entries)}
 
     let updateQueued = false;
 
+    function alignHashTarget() {
+      const hash = window.__pendingInitialHash || location.hash;
+      if (!hash) return;
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (!target) return;
+      if (window.__pendingInitialHash) {
+        history.replaceState(null, "", location.pathname + location.search + window.__pendingInitialHash);
+        window.__pendingInitialHash = "";
+      }
+      target.scrollIntoView({ block: "start", inline: "nearest", behavior: "auto" });
+    }
+
     function queueVideoUpdate() {
       if (updateQueued) return;
       updateQueued = true;
@@ -1902,7 +1974,18 @@ ${renderGuideSection('进阶', advanced, entries)}
 
     window.addEventListener("scroll", queueVideoUpdate, { passive: true });
     window.addEventListener("resize", queueVideoUpdate);
-    window.addEventListener("load", queueVideoUpdate);
+    window.addEventListener("load", () => {
+      alignHashTarget();
+      queueVideoUpdate();
+      setTimeout(() => {
+        alignHashTarget();
+        queueVideoUpdate();
+      }, 250);
+    });
+    window.addEventListener("hashchange", () => {
+      alignHashTarget();
+      queueVideoUpdate();
+    });
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         demoVideos.forEach(pauseDemoVideo);
@@ -1926,6 +2009,12 @@ function renderManualPage(entries) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    window.__pendingInitialHash = location.hash;
+    if (window.__pendingInitialHash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  </script>
   <title>Tikitaka 使用说明</title>
   <style>
     :root {
@@ -1948,7 +2037,7 @@ function renderManualPage(entries) {
     }
 
     html {
-      scroll-behavior: smooth;
+      scroll-behavior: auto;
     }
 
     body {
@@ -1959,6 +2048,7 @@ function renderManualPage(entries) {
       font-size: 15px;
       line-height: 1.58;
       letter-spacing: 0;
+      overflow-x: hidden;
     }
 
     a {
@@ -2539,7 +2629,8 @@ function renderManualPage(entries) {
       .header-inner,
       .layout,
       .footer {
-        width: min(100% - 22px, 1180px);
+        width: calc(100% - 22px);
+        max-width: 1180px;
       }
 
       .section-head,
@@ -2575,8 +2666,8 @@ function renderManualPage(entries) {
       <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
-        <a href="index.html">返回简化版</a>
-        <a href="#quickstart">简化引导</a>
+        <a href="index.html">返回首页</a>
+        <a href="#quickstart">快速上手</a>
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
         <a href="#advanced">进阶设置</a>
@@ -2588,8 +2679,8 @@ function renderManualPage(entries) {
   <main class="layout">
     <aside class="side-nav" aria-label="目录">
       <h2>目录</h2>
-      <a href="index.html">返回简化版</a>
-      <a href="#quickstart">简化引导</a>
+      <a href="index.html">返回首页</a>
+      <a href="#quickstart">快速上手</a>
       <a href="#guide">按问题找演示</a>
       <a href="#basic">基础设置</a>
 ${basic.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEscape(entry.title)}</a>`).join('\n')}
@@ -2732,6 +2823,18 @@ ${renderSection('进阶', advanced, entries)}
 
     let updateQueued = false;
 
+    function alignHashTarget() {
+      const hash = window.__pendingInitialHash || location.hash;
+      if (!hash) return;
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (!target) return;
+      if (window.__pendingInitialHash) {
+        history.replaceState(null, "", location.pathname + location.search + window.__pendingInitialHash);
+        window.__pendingInitialHash = "";
+      }
+      target.scrollIntoView({ block: "start", inline: "nearest", behavior: "auto" });
+    }
+
     function queueVideoUpdate() {
       if (updateQueued) return;
       updateQueued = true;
@@ -2743,7 +2846,18 @@ ${renderSection('进阶', advanced, entries)}
 
     window.addEventListener("scroll", queueVideoUpdate, { passive: true });
     window.addEventListener("resize", queueVideoUpdate);
-    window.addEventListener("load", queueVideoUpdate);
+    window.addEventListener("load", () => {
+      alignHashTarget();
+      queueVideoUpdate();
+      setTimeout(() => {
+        alignHashTarget();
+        queueVideoUpdate();
+      }, 250);
+    });
+    window.addEventListener("hashchange", () => {
+      alignHashTarget();
+      queueVideoUpdate();
+    });
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         demoVideos.forEach(pauseDemoVideo);
@@ -2768,7 +2882,7 @@ function renderReadme(entries) {
 
 这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
 
-首页 \`index.html\` 是简化版说明，覆盖全部视频但只保留照做步骤、检查点和下一步。完整内部说明页在 \`manual.html\`，保留更多解释、风险提示、相关跳转和资料依据。
+首页 \`index.html\` 是面向用户的使用说明，覆盖全部视频，但默认只展示照做步骤；检查点、注意事项和内部解释按需展开或进入 \`manual.html\` 查看。
 
 ## 在线说明网站
 
