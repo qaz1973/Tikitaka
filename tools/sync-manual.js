@@ -948,7 +948,7 @@ function renderGuideStep(entry, nextEntry) {
                 ${moreBlocks}
               </details>` : ''}
               <div class="guide-actions">
-                ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#quickstart">回到主流程</a>`}
+                ${nextEntry ? `<a href="#${nextEntry.id}">下一步：${htmlEscape(nextEntry.title)}</a>` : `<a href="#advanced">回到目录</a>`}
               </div>
             </div>
           </article>`;
@@ -978,6 +978,19 @@ function renderGuideSection(section, entries, allEntries) {
         </div>
         <div class="guide-steps">
 ${renderGuideSteps(entries, allEntries)}
+        </div>
+      </section>`;
+}
+
+function renderAdvancedDirectory(entries) {
+  return `
+      <section class="guide-section is-advanced" id="advanced">
+        <div class="section-head">
+          <h2>进阶功能目录</h2>
+          <p>按录屏顺序查看全部功能。每项默认只显示操作步骤，检查点和注意事项点开看。</p>
+        </div>
+        <div class="guide-steps">
+${renderGuideSteps(entries, entries)}
         </div>
       </section>`;
 }
@@ -1336,9 +1349,6 @@ function renderLaunchPage(entries) {
 }
 
 function renderGuidePage(entries) {
-  const basic = entries.filter((entry) => entry.section === '基础设置');
-  const advanced = entries.filter((entry) => entry.section === '进阶');
-
   return `<!doctype html>
 <html lang="zh-CN">
 <head>
@@ -1350,7 +1360,7 @@ function renderGuidePage(entries) {
       history.replaceState(null, "", location.pathname + location.search);
     }
   </script>
-  <title>Tikitaka 使用说明</title>
+  <title>Tikitaka 进阶说明</title>
   <style>
     :root {
       color-scheme: light;
@@ -1818,25 +1828,19 @@ function renderGuidePage(entries) {
   <header class="header-wrap">
     <div class="header">
       <p class="eyebrow">Tikitaka 配置工具</p>
-      <h1>Tikitaka 使用说明</h1>
-      <p class="intro">按顺序配置，能测试就保存。遇到问题从下面入口找。</p>
+      <h1>Tikitaka 进阶说明</h1>
+      <p class="intro">只保留一个功能目录。按录屏顺序查看，每项检查和注意事项需要时再展开。</p>
       <nav class="top-links" aria-label="快速导航">
-        <a href="#quickstart">开始配置</a>
-        <a href="#guide">按问题跳转</a>
-        <a href="#basic">基础流程</a>
-        <a href="#advanced">进阶功能</a>
+        <a href="#advanced">功能目录</a>
       </nav>
     </div>
   </header>
 
   <main class="page">
-${renderQuickStart(entries)}
-${renderGuideIssueLinks(entries)}
-${renderGuideSection('基础设置', basic, entries)}
-${renderGuideSection('进阶', advanced, entries)}
+${renderAdvancedDirectory(entries)}
   </main>
 
-  <footer class="footer">Tikitaka 使用说明 · 共 ${entries.length} 个视频演示</footer>
+  <footer class="footer">Tikitaka 进阶说明 · 共 ${entries.length} 个视频演示</footer>
 
   <script>
     const DEMO_PLAYBACK_RATE = 0.5;
@@ -2873,11 +2877,11 @@ function renderReadme(entries) {
     return `${index + 1}. ${entry.section} / ${entry.title} - ${detail.summary}`;
   });
 
-  return `# Tikitaka 使用说明
+  return `# Tikitaka 进阶说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
+这是 Tikitaka 配置工具的中文进阶说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
 
-首页 \`index.html\` 是唯一发布的使用说明界面，覆盖全部视频。页面默认只展示照做步骤，检查点和注意事项按需展开。
+首页 \`index.html\` 是唯一发布的进阶功能目录，覆盖全部视频。页面默认只展示照做步骤，检查点和注意事项按需展开。
 
 ## 在线说明网站
 
@@ -2913,7 +2917,7 @@ node tools/sync-manual.js "D:\\2\\说明书视频文件部分"
 - 页面滚动到某个步骤时，只自动播放当前步骤视频。
 - 视频静音、无控制条、循环播放，站内固定按 0.5 倍播放。
 
-## 当前步骤
+## 当前目录
 
 ${lines.join('\n')}
 

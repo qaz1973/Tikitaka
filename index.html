@@ -9,7 +9,7 @@
       history.replaceState(null, "", location.pathname + location.search);
     }
   </script>
-  <title>Tikitaka 使用说明</title>
+  <title>Tikitaka 进阶说明</title>
   <style>
     :root {
       color-scheme: light;
@@ -477,46 +477,20 @@
   <header class="header-wrap">
     <div class="header">
       <p class="eyebrow">Tikitaka 配置工具</p>
-      <h1>Tikitaka 使用说明</h1>
-      <p class="intro">按顺序配置，能测试就保存。遇到问题从下面入口找。</p>
+      <h1>Tikitaka 进阶说明</h1>
+      <p class="intro">只保留一个功能目录。按录屏顺序查看，每项检查和注意事项需要时再展开。</p>
       <nav class="top-links" aria-label="快速导航">
-        <a href="#quickstart">开始配置</a>
-        <a href="#guide">按问题跳转</a>
-        <a href="#basic">基础流程</a>
-        <a href="#advanced">进阶功能</a>
+        <a href="#advanced">功能目录</a>
       </nav>
     </div>
   </header>
 
   <main class="page">
 
-      <section class="quickstart-section" id="quickstart">
+      <section class="guide-section is-advanced" id="advanced">
         <div class="section-head">
-          <h2>先按这 7 步配置</h2>
-          <p>第一次使用照顺序走，能正常测试就保存。</p>
-        </div>
-        <div class="flow-list">
-          <a class="flow-card" href="#step-010"><span class="flow-index">01</span><span><strong>选设备</strong><em>先套用设备型号，拿到基础配置。</em><small>设备预设</small></span></a><a class="flow-card" href="#step-020"><span class="flow-index">02</span><span><strong>选布局</strong><em>按你的面板确认按键排列。</em><small>布局预设</small></span></a><a class="flow-card" href="#step-030"><span class="flow-index">03</span><span><strong>改功能</strong><em>位置对了但功能不对时调整键位。</em><small>按键功能调整</small></span></a><a class="flow-card" href="#step-080"><span class="flow-index">04</span><span><strong>校准按键</strong><em>让设备知道每个磁轴的起点和终点。</em><small>按键校准</small></span></a><a class="flow-card" href="#step-090"><span class="flow-index">05</span><span><strong>保存校准</strong><em>校准完成后先保存一次。</em><small>保存校准结果</small></span></a><a class="flow-card" href="#step-100"><span class="flow-index">06</span><span><strong>测试输入</strong><em>确认触发、释放和行程正常。</em><small>RT 与行程测试</small></span></a><a class="flow-card" href="#step-110"><span class="flow-index">07</span><span><strong>保存配置</strong><em>测试没问题就写入设备。</em><small>保存配置到设备</small></span></a>
-        </div>
-        <div class="quickstart-note">
-          <strong>先判断能不能用：</strong>按键位置对、功能对、测试页面能稳定按下和松开，就可以保存配置。
-        </div>
-      </section>
-
-      <section class="compact-section" id="guide">
-        <div class="section-head">
-          <h2>遇到问题直接点</h2>
-          <p>不用从头找，点问题就跳到对应演示。</p>
-        </div>
-        <div class="mini-grid">
-          <a class="mini-link" href="#step-010"><strong>第一次配置</strong><span>设备预设</span></a><a class="mini-link" href="#step-020"><strong>按键位置不对</strong><span>布局预设</span></a><a class="mini-link" href="#step-030"><strong>按键功能不对</strong><span>按键功能调整</span></a><a class="mini-link" href="#step-230"><strong>按了实体键，画面不是这个键</strong><span>按键通道与引脚分配</span></a><a class="mini-link" href="#step-040"><strong>一个键太灵敏或不触发</strong><span>单键行程触发设置</span></a><a class="mini-link" href="#step-050"><strong>多个键一起调手感</strong><span>批量行程触发设置</span></a><a class="mini-link" href="#step-060"><strong>RT 不跟手</strong><span>单键 RT 设置</span></a><a class="mini-link" href="#step-090"><strong>校准后怕丢失</strong><span>保存校准结果</span></a><a class="mini-link" href="#step-100"><strong>最后确认有没有成功</strong><span>RT 与行程测试</span></a><a class="mini-link" href="#step-260"><strong>灯亮到别的按键上</strong><span>按键灯光顺序设置</span></a><a class="mini-link" href="#step-270"><strong>颜色不对</strong><span>按键灯光颜色设置</span></a><a class="mini-link" href="#step-230"><strong>加了新按键但不能用</strong><span>按键通道与引脚分配</span></a>
-        </div>
-      </section>
-
-      <section class="guide-section" id="basic">
-        <div class="section-head">
-          <h2>基础流程</h2>
-          <p>先把设备配置到能正常使用。</p>
+          <h2>进阶功能目录</h2>
+          <p>按录屏顺序查看全部功能。每项默认只显示操作步骤，检查点和注意事项点开看。</p>
         </div>
         <div class="guide-steps">
 
@@ -812,15 +786,6 @@
               </div>
             </div>
           </article>
-        </div>
-      </section>
-
-      <section class="guide-section is-advanced" id="advanced">
-        <div class="section-head">
-          <h2>进阶功能</h2>
-          <p>需要时再看，普通用户可以先跳过。</p>
-        </div>
-        <div class="guide-steps">
 
           <article class="guide-step" id="step-210">
             <video muted loop playsinline preload="metadata">
@@ -1044,7 +1009,7 @@
                 <p class="guide-note">目的说明：自动校准会让开机/连接初始化增加约 3 秒，用这段时间读取当前磁轴空闲点并更新补偿，主要是为了应对同一设备在 PC、主机、Switch 等平台之间切换后环境和识别状态变化，减少漂移、误触、断触或第一次连接不稳定的问题。</p>
               </details>
               <div class="guide-actions">
-                <a href="#quickstart">回到主流程</a>
+                <a href="#advanced">回到目录</a>
               </div>
             </div>
           </article>
@@ -1052,7 +1017,7 @@
       </section>
   </main>
 
-  <footer class="footer">Tikitaka 使用说明 · 共 23 个视频演示</footer>
+  <footer class="footer">Tikitaka 进阶说明 · 共 23 个视频演示</footer>
 
   <script>
     const DEMO_PLAYBACK_RATE = 0.5;
