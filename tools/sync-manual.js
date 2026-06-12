@@ -478,24 +478,26 @@ const manualDetails = new Map([
   }],
   ['进阶/自动校准', {
     title: '自动校准',
-    summary: '开启或关闭磁轴自动校准，让设备根据环境变化学习和应用校准 Profile。',
+    summary: '启动或连接后自动读取当前磁轴空闲状态并更新校准补偿，减少环境变化带来的偏移、误触或断触；一般保持默认开启。',
     steps: [
       '进入磁轴配置页面。',
       '找到自动校准开关。',
-      '按需要开启或关闭。',
-      '开启后先做一次完整手动校准和测试。',
+      '普通使用保持开启。',
+      '连接设备或重启后，先等待初始化完成，再开始测试按键。',
+      '如果要做特殊调试、固定手感，或确认自动校准影响使用，再考虑关闭。',
       '保存配置。'
     ],
     verify: [
-      '启用后按键状态仍然稳定。',
-      '如果环境或设备状态变化后，按键没有出现异常触发。'
+      '设备刚连接时如果初始化稍慢，属于重新获取磁轴状态的正常现象。',
+      '初始化完成后，按键静止时没有误触、断触或异常跳动。',
+      '进入测试页面后，按下和松开都能稳定显示。'
     ],
     notes: [
-      '自动校准适合温漂或环境变化导致空闲点偏移的场景。',
-      '如果需要完全固定手感，可优先使用手动校准并关闭自动校准。',
-      '专业模式中可查看或清空自动校准保存表。'
+      '工作逻辑：开启后设备会在启动或连接时参考当前磁轴空闲点，自动更新校准补偿，避免温度、磁体位置或环境变化造成读数偏移。',
+      '这不是调手感的主要入口；普通用户一般保持开启即可，不需要反复开关。',
+      '如果需要完全固定手感，可先完成手动校准，再按调试需要关闭自动校准。'
     ],
-    tags: ['自动校准', 'Profile'],
+    tags: ['自动校准', '默认开启'],
     refs: ['HallEffectConfigPage.tsx', 'src/addons/he_trigger.cpp']
   }],
 ]);
@@ -842,11 +844,9 @@ function renderStep(entry, entryByTopic) {
 
   return `
           <article class="step" id="${entry.id}">
-            <div class="video-frame">
-              <video muted loop playsinline preload="metadata">
-                <source src="${pathToUrl(entry.parts)}" type="video/mp4">
-              </video>
-            </div>
+            <video muted loop playsinline preload="metadata">
+              <source src="${pathToUrl(entry.parts)}" type="video/mp4">
+            </video>
             <div class="step-body">
               <div class="step-summary">
                 <h3>${htmlEscape(entry.title)}</h3>
@@ -892,42 +892,6 @@ ${renderSteps(entries, allEntries)}
       </section>`;
 }
 
-function renderLanguagePlan() {
-  return `
-      <section class="language-section" id="language">
-        <div class="section-head">
-          <h2>不重录视频怎么做多语言</h2>
-          <p>录屏里的界面仍是中文时，优先翻译网页说明和字幕，让用户按文字理解操作；视频只保留为操作位置演示。</p>
-        </div>
-        <div class="language-body">
-          <div class="language-block">
-            <h3>第一步：翻译网页说明</h3>
-            <ul>
-              <li>把标题、摘要、步骤和“用哪个演示继续”做成中文、英文、日文等版本。</li>
-              <li>关键按钮保留中文名并加括号翻译，例如“设备预设 (Device Preset)”。</li>
-              <li>术语固定：Rapid Trigger、SOCD、Travel、Actuation、GPIO、HE Channel 不要来回换译法。</li>
-            </ul>
-          </div>
-          <div class="language-block">
-            <h3>第二步：加外置字幕</h3>
-            <ul>
-              <li>每段视频配独立 VTT 字幕文件，按语言切换，不重新压制 MP4。</li>
-              <li>字幕只写当前动作和按钮位置，短句优先，避免遮住操作画面。</li>
-              <li>自动播放仍保持静音，字幕负责解释，旁白可以作为后续增强。</li>
-            </ul>
-          </div>
-          <div class="language-block">
-            <h3>第三步：关键位置加标注</h3>
-            <ul>
-              <li>对难找的按钮、菜单、保存动作做网页浮层标注。</li>
-              <li>浮层按时间点显示，不烧录进视频，后续改语言只改文本。</li>
-              <li>不建议直接把视频画面里的中文全部替换，维护成本高且容易挡住真实界面。</li>
-            </ul>
-          </div>
-        </div>
-      </section>`;
-}
-
 function renderReferenceList(items, link = false) {
   return items.map(([label, value]) => {
     if (link) {
@@ -961,7 +925,6 @@ function renderIndex(entries) {
       --warning-bg: #fff7e8;
       --warning-line: #f2c98b;
       --shadow: 0 8px 24px rgba(31, 41, 51, 0.06);
-      --video-zoom: 1.08;
     }
 
     * {
@@ -1181,26 +1144,15 @@ function renderIndex(entries) {
       box-shadow: 0 0 0 3px rgba(15, 139, 141, 0.12);
     }
 
-    .video-frame {
+    video {
       width: 100%;
       aspect-ratio: 16 / 9;
-      overflow: hidden;
+      display: block;
       border: 0;
       border-bottom: 1px solid var(--line);
       border-radius: 0;
       background: #0b1118;
-    }
-
-    .video-frame video {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border: 0;
-      border-radius: 0;
-      background: #0b1118;
-      object-fit: cover;
-      transform: scale(var(--video-zoom));
-      transform-origin: center center;
+      object-fit: contain;
     }
 
     .step-body {
@@ -1410,30 +1362,6 @@ function renderIndex(entries) {
       text-underline-offset: 3px;
     }
 
-    .language-body {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px 28px;
-      padding: 18px 22px 20px;
-    }
-
-    .language-block h3 {
-      margin: 0 0 8px;
-      font-size: 15px;
-      line-height: 1.3;
-    }
-
-    .language-block ul {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .language-block li + li {
-      margin-top: 5px;
-    }
-
     .footer {
       margin-top: 0;
       margin-bottom: 34px;
@@ -1457,7 +1385,6 @@ function renderIndex(entries) {
 
       .detail-grid,
       .issue-grid,
-      .language-body,
       .reference-body {
         grid-template-columns: 1fr;
       }
@@ -1477,7 +1404,6 @@ function renderIndex(entries) {
       .section-head,
       .steps,
       .issue-grid,
-      .language-body,
       .reference-body {
         padding-left: 14px;
         padding-right: 14px;
@@ -1498,13 +1424,12 @@ function renderIndex(entries) {
     <div class="header-inner">
       <p class="eyebrow">Tikitaka 配置工具</p>
       <h1>Tikitaka 使用说明</h1>
-      <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度统一为 1.25 倍，并轻微放大以裁掉录屏两侧多余空白。</p>
+      <p class="intro">每个步骤都对应一个录屏演示。先看视频，再按“用哪个演示继续”跳到下一步；不知道问题属于哪里时，先用“按问题找演示”。视频静音自动播放，滚动到对应步骤时只播放当前视频，播放速度固定为 0.5 倍。</p>
       <p class="notice">注意：保存配置、重启、恢复默认、切换输入模式等操作会写入或改变设备状态。执行前请确认当前参数无误，必要时先备份。</p>
       <nav class="quick-links" aria-label="快速导航">
         <a href="#guide">按问题找演示</a>
         <a href="#basic">基础设置</a>
         <a href="#advanced">进阶设置</a>
-        <a href="#language">多语言处理</a>
         <a href="#references">参考资料</a>
       </nav>
     </div>
@@ -1518,7 +1443,6 @@ function renderIndex(entries) {
 ${basic.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEscape(entry.title)}</a>`).join('\n')}
       <a href="#advanced">进阶设置</a>
 ${advanced.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEscape(entry.title)}</a>`).join('\n')}
-      <a href="#language">多语言处理</a>
       <a href="#references">参考资料</a>
     </aside>
 
@@ -1526,7 +1450,6 @@ ${advanced.map((entry) => `      <a class="minor" href="#${entry.id}">${htmlEsca
 ${renderIssueGuide(entries)}
 ${renderSection('基础设置', basic, entries)}
 ${renderSection('进阶', advanced, entries)}
-${renderLanguagePlan()}
       <section class="reference-section" id="references">
         <div class="section-head">
           <h2>参考资料</h2>
@@ -1549,7 +1472,7 @@ ${renderLanguagePlan()}
   <footer class="footer">Tikitaka 使用说明 · 视频来自说明书视频文件部分 · 共 ${entries.length} 个步骤</footer>
 
   <script>
-    const DEMO_PLAYBACK_RATE = 1.25;
+    const DEMO_PLAYBACK_RATE = 0.5;
     const demoVideos = Array.from(document.querySelectorAll("video"));
     let currentActiveVideo = null;
 
@@ -1608,8 +1531,7 @@ ${renderLanguagePlan()}
     });
 
     function getVideoScore(video) {
-      const target = video.closest(".video-frame") || video;
-      const rect = target.getBoundingClientRect();
+      const rect = video.getBoundingClientRect();
       const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
       if (visibleHeight <= 0) return 0;
 
@@ -1691,7 +1613,7 @@ function renderReadme(entries) {
 
   return `# Tikitaka 使用说明
 
-这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度并轻微裁掉录屏两侧空白。
+这是 Tikitaka 配置工具的中文说明网站。页面由 \`tools/sync-manual.js\` 根据录屏目录自动同步生成，并为每个录屏补充普通用户可直接点击的下一步索引。站内视频保持原始 MP4 不动，在网页层统一播放速度。
 
 ## 在线说明网站
 
@@ -1723,12 +1645,7 @@ node tools/sync-manual.js "D:\\2\\说明书视频文件部分"
 
 - 源视频不重编码，保留在原录屏目录。
 - 页面滚动到某个步骤时，只自动播放当前步骤视频。
-- 视频静音、无控制条、循环播放，站内统一按 1.25 倍播放。
-- 页面使用视频外框裁切和轻微放大改善两侧空白，不直接破坏 MP4。
-
-## 不重录做多语言
-
-推荐先做网页文案多语言，再加外置 VTT 字幕和关键位置浮层标注。录屏里的中文界面不用马上替换，翻译时保留中文按钮名并加括号解释，例如“设备预设 (Device Preset)”。术语建议固定使用 Rapid Trigger、SOCD、Travel、Actuation、GPIO、HE Channel。
+- 视频静音、无控制条、循环播放，站内固定按 0.5 倍播放。
 
 ## 当前步骤
 
